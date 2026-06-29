@@ -44,7 +44,7 @@
     .flow-line{height:12px;border-radius:99px;background:linear-gradient(90deg,#00d2ff,#00e676);position:relative;box-shadow:0 0 14px rgba(0,210,255,.35)}
     .flow-line:after{content:"";position:absolute;right:-8px;top:50%;transform:translateY(-50%);border-left:12px solid #00e676;border-top:9px solid transparent;border-bottom:9px solid transparent}
     .ro-trains{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-    .ro-train{background:#0f2036;border:1px solid rgba(0,210,255,.18);border-radius:18px;padding:12px;min-height:365px;position:relative;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+    .ro-train{background:#0f2036;border:1px solid rgba(0,210,255,.18);border-radius:18px;padding:12px;min-height:300px;position:relative;box-shadow:0 10px 24px rgba(0,0,0,.18)}
     .ro-train.low{border-color:rgba(255,23,68,.45);background:linear-gradient(180deg,#241421,#111b2f)}
     .ro-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
     .ro-badge{font-weight:900;color:#fff;background:rgba(0,210,255,.17);border:1px solid rgba(0,210,255,.3);border-radius:999px;padding:6px 10px;font-size:.8rem}
@@ -484,13 +484,7 @@ function renderModules(vals, labelPeriodo){
               <div class="pressure-arrow"></div>
             </div>
           </div>
-          <div class="membranes">
-            <div class="membrane"></div>
-            <div class="membrane"></div>
-            <div class="membrane"></div>
-            <div class="membrane"></div>
-          </div>
-          <div class="ro-caption">Bomba de alta presión + bancos de membranas RO</div>
+          <div class="ro-caption">Bomba de alta presión del módulo RO</div>
           <div class="ro-metrics">
             <div class="ro-metric"><span>Recuperación</span><strong>${format(rec,1)}%</strong></div>
             <div class="ro-metric"><span>Conductividad</span><strong>${format(cond,1)} µS/cm</strong></div>
@@ -528,7 +522,7 @@ function renderModules(vals, labelPeriodo){
           <div class="line"></div>
           <div class="pipe-node"><i class="fas fa-droplet"></i></div>
         </div>
-        <div class="ro-caption"><i class="fas fa-microchip"></i> Tren de ósmosis inversa con bomba / motor y membranas</div>
+        <div class="ro-caption"><i class="fas fa-gear"></i> Módulo RO con bomba / motor</div>
         <div class="detail-grid">
           <div class="detail-card"><div class="lbl">% Recuperación</div><div class="val">${format(rec,1)}%</div><div class="tag">Dato conectado H-L</div></div>
           <div class="detail-card"><div class="lbl">Conductividad</div><div class="val">${format(cond,1)} µS/cm</div><div class="tag">Columnas O-S</div></div>
