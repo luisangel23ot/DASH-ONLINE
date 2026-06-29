@@ -3,363 +3,154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCADA Ejecutivo | 5 Ósmosis Inversa NEXA</title>
+  <title>Dashboard SCADA | 5 Ósmosis Inversa - Sheets Mensual</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root{
-      --navy:#071b3a; --navy2:#092653; --blue:#0b73ce; --cyan:#00b7ff;
-      --green:#11b76b; --red:#e53935; --yellow:#f6c90e; --orange:#ff8f00;
-      --bg:#eef2f6; --card:#ffffff; --line:#d9e2ec; --text:#10223f; --muted:#65748b;
-      --shadow:0 8px 20px rgba(8,27,58,.10); --radius:14px;
+      --bg:#07111f; --bg2:#0b1526; --panel:#111d31; --panel2:#16243a; --line:#243953;
+      --txt:#eef6ff; --muted:#8ea3ba; --cyan:#10d9ff; --blue:#3b82f6; --green:#00e676;
+      --yellow:#ffcc00; --red:#ff3b5c; --purple:#b388ff; --white:#ffffff;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
-    body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-    .app{display:flex;min-height:100vh}
-    .overlay{position:fixed;inset:0;background:rgba(5,18,40,.48);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:30}
-    .overlay.active{opacity:1;visibility:visible}
-
-    .sidebar{position:fixed;top:0;left:-320px;width:310px;height:100vh;background:linear-gradient(180deg,#061631,#09224b);color:#fff;z-index:40;transition:.3s;box-shadow:12px 0 28px rgba(0,0,0,.35);overflow:auto}
-    .sidebar.active{left:0}
-    .side-head{padding:22px;border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between}
-    .side-brand{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:800}
-    .side-brand i{font-size:1.65rem;color:var(--cyan)}
-    .close{border:0;background:transparent;color:white;font-size:1.3rem;cursor:pointer}
-    .side-section{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .side-title{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:#96acd0;margin-bottom:12px;font-weight:700}
-    .nav-item{display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:10px;color:#dce9ff;cursor:pointer;margin-bottom:6px;transition:.2s;font-weight:650}
-    .nav-item:hover,.nav-item.active{background:rgba(0,183,255,.13);color:#fff;box-shadow:inset 3px 0 0 var(--cyan)}
-    .nav-item i{width:20px;color:#7ed8ff}
-    .select-box,.date-box{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.16);border-radius:10px;background:#071b3a;color:#fff;outline:none;margin-bottom:10px}
-    .mini-info{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.13);font-size:.88rem}
-    .mini-info span:last-child{font-weight:800;color:#fff}
-
-    .main{flex:1;width:100%}
-    .header{height:78px;background:linear-gradient(90deg,#061631,#092a5e);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;box-shadow:0 6px 18px rgba(0,0,0,.18);position:sticky;top:0;z-index:20}
-    .head-left{display:flex;align-items:center;gap:18px}
-    .menu-btn{width:42px;height:42px;border-radius:10px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.16);cursor:pointer;font-size:1.2rem}
-    .logo{display:flex;align-items:center;gap:12px;font-weight:900;font-size:1.45rem;letter-spacing:.5px}
-    .logo i{font-size:1.7rem;color:#00c6ff}
-    .title{font-size:1.35rem;font-weight:800;border-left:1px solid rgba(255,255,255,.22);padding-left:18px}
-    .head-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
-    .chip{display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:.9rem}
-    .dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
-
-    .content{padding:20px 22px 28px}
-    .top-filter{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-    .section-name h1{font-size:1.35rem;color:var(--navy);line-height:1.2}.section-name p{color:var(--muted);font-size:.92rem;margin-top:4px}
-    .filter-card{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:10px 12px;border-radius:12px;box-shadow:var(--shadow)}
-    .filter-card input,.filter-card select{border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none;color:var(--text);font-weight:650;background:#f8fafc}
-
-    .kpis{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-    .kpi{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;align-items:center;gap:13px;min-height:104px}
-    .kpi-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#0b73ce,#063a83);color:white;font-size:1.25rem;flex-shrink:0}
-    .kpi small{display:block;color:var(--muted);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px}.kpi strong{font-size:1.52rem;color:var(--navy);display:block;margin-top:5px;line-height:1.15}.kpi em{font-style:normal;color:var(--muted);font-size:.82rem}.kpi.red strong{color:var(--red)}.kpi.green strong{color:var(--green)}
-
-    .grid{display:grid;grid-template-columns:320px 1fr;gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.card-head{background:linear-gradient(90deg,#08275b,#0b4c93);color:#fff;padding:10px 14px;font-weight:850;text-align:center;letter-spacing:.3px;text-transform:uppercase;font-size:.88rem}.card-body{padding:14px}
-    .summary-list{display:grid;gap:10px}.summary-row{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;border-bottom:1px solid #eef2f6;padding-bottom:8px;font-size:.88rem}.summary-row i{color:var(--blue);font-size:1.05rem}.summary-row span{color:#34435b}.summary-row b{color:var(--navy)}
-    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.tagbox{background:#f4f8fc;border:1px solid #e3edf7;border-radius:10px;padding:9px;text-align:center}.tagbox small{display:block;background:#0a2d66;color:#fff;border-radius:6px;padding:5px;font-size:.67rem;font-weight:800}.tagbox b{display:block;margin-top:7px;color:#092653}
-
-    .scada-panel{grid-column:2;}.scada-wrap{padding:14px;background:linear-gradient(180deg,#f9fbfd,#eef4fa)}
-    .ro-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-    .ro-card{border:1px solid #cfdbe8;border-radius:14px;background:white;box-shadow:0 5px 14px rgba(11,38,83,.08);overflow:hidden;position:relative}
-    .ro-head{display:flex;justify-content:space-between;align-items:center;background:#f5f8fc;border-bottom:1px solid #e5ecf5;padding:10px 12px}.ro-title{font-weight:900;color:#08275b;font-size:1rem}.status{font-size:.72rem;font-weight:800;padding:5px 8px;border-radius:999px}.status.run{background:#e4f8ee;color:#0b8e50}.status.stop{background:#fdeaea;color:#c62828}.status.warn{background:#fff5cf;color:#9b6a00}
-    .process{height:190px;position:relative;padding:12px}.tank{position:absolute;left:18px;top:46px;width:54px;height:98px;border:4px solid #0b73ce;border-radius:11px;background:linear-gradient(180deg,rgba(0,183,255,.14) 10%,rgba(0,183,255,.38) 80%)}.membrane{position:absolute;right:18px;top:50px;width:92px;height:90px;border:4px solid #0a2d66;border-radius:50%;background:radial-gradient(circle,#fff 35%,#dfeefe 36%,#dfeefe 62%,#fff 63%)}.pipe{position:absolute;height:8px;background:#8395aa;border-radius:99px}.p1{left:72px;top:84px;width:58px}.p2{right:110px;top:84px;width:45px}.p3{right:64px;top:140px;width:6px;height:26px;background:#11b76b}.valve{position:absolute;width:18px;height:18px;background:var(--green);border-radius:4px;transform:rotate(45deg);border:2px solid #fff;box-shadow:0 0 0 2px rgba(17,183,107,.25)}.v1{left:88px;top:78px}.v2{right:124px;top:78px}.pump{position:absolute;left:80px;top:112px;width:45px;height:45px;border-radius:50%;background:#0b73ce;color:#fff;display:grid;place-items:center;box-shadow:0 8px 15px rgba(11,115,206,.25)}.flow{position:absolute;left:75px;top:63px;color:var(--cyan);font-size:.7rem;animation:flow 1s infinite linear}.flow.f2{left:125px;top:78px}.flow.f3{right:80px;top:76px}@keyframes flow{from{opacity:.25;transform:translateX(-4px)}to{opacity:1;transform:translateX(6px)}}
-    .ro-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}.metric{background:#f6f9fd;border-radius:9px;padding:8px;text-align:center}.metric small{display:block;color:var(--muted);font-size:.65rem;text-transform:uppercase;font-weight:800}.metric b{font-size:1rem;color:#0a2d66}.metric.alert b{color:var(--red)}
-
-    .lower{display:grid;grid-template-columns:1.05fr 1.4fr;gap:14px;margin-top:14px}.chart-card{height:310px}.chart-card.tall{height:360px}.canvas{height:250px;padding:12px}.tall .canvas{height:300px}.gaugeBox{height:260px;display:grid;place-items:center}.gauge{width:230px;height:120px;border-radius:230px 230px 0 0;background:conic-gradient(from 180deg,var(--green) 0 42%,var(--yellow) 42% 65%,var(--red) 65% 100%);position:relative;overflow:hidden}.gauge:after{content:"";position:absolute;left:28px;right:28px;bottom:0;height:90px;background:#fff;border-radius:180px 180px 0 0}.needle{position:absolute;bottom:0;left:50%;width:4px;height:105px;background:#1d2738;transform-origin:bottom;transform:rotate(-32deg);z-index:2}.gaugeVal{text-align:center;margin-top:-50px;position:relative;z-index:3}.gaugeVal b{font-size:2.1rem;color:var(--navy)}.gaugeVal span{color:var(--muted);font-weight:700}
-
-    .hidden{display:none!important}
-    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.scada-panel{grid-column:auto}.ro-grid{grid-template-columns:repeat(2,1fr)}.lower{grid-template-columns:1fr}}
-    @media(max-width:680px){.header{height:auto;align-items:flex-start;gap:12px;flex-direction:column;padding:16px}.title{border-left:0;padding-left:0}.kpis{grid-template-columns:1fr}.ro-grid{grid-template-columns:1fr}.filter-card{width:100%;flex-direction:column;align-items:stretch}}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+    body{background:radial-gradient(circle at top left,#102b4b 0,#07111f 38%,#050a13 100%);color:var(--txt);min-height:100vh;overflow-x:hidden}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:98;display:none}.overlay.active{display:block}
+    .sidebar{position:fixed;top:0;left:-340px;width:330px;height:100vh;background:#0b1728;border-right:1px solid var(--line);z-index:99;transition:.25s;box-shadow:10px 0 25px rgba(0,0,0,.35);overflow-y:auto}.sidebar.active{left:0}
+    .side-head{padding:20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,#0c223a,#112c48)}
+    .side-head h2{font-size:1.05rem;color:var(--cyan)}.icon-btn{background:transparent;border:0;color:var(--txt);font-size:1.35rem;cursor:pointer}
+    .side-sec{padding:18px;border-bottom:1px solid var(--line)}.side-title{font-size:.76rem;text-transform:uppercase;color:var(--muted);letter-spacing:.9px;margin-bottom:12px}
+    .side-item{display:flex;justify-content:space-between;align-items:center;background:#07111f;border:1px solid #19314a;border-left:4px solid var(--cyan);padding:12px;border-radius:10px;margin-bottom:10px}.side-item.warn{border-left-color:var(--yellow)}.side-item.danger{border-left-color:var(--red)}.side-item.ok{border-left-color:var(--green)}
+    .side-item small{color:var(--muted)}.side-item strong{font-size:1.05rem}
+    .main{padding:18px;max-width:1800px;margin:0 auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;background:rgba(17,29,49,.92);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:16px;box-shadow:0 12px 28px rgba(0,0,0,.25)}
+    .brand{display:flex;align-items:center;gap:14px}.brand h1{font-size:1.25rem}.brand span{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}.logo{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#0ea5e9,#0f766e);box-shadow:0 0 20px rgba(16,217,255,.25)}
+    .status-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,230,118,.38);background:rgba(0,230,118,.08);color:var(--green);padding:8px 12px;border-radius:999px;font-weight:700;font-size:.86rem}.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+    .filters{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px;align-items:end;background:rgba(11,21,38,.82);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:16px}.field label{display:block;font-size:.76rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}.field select,.field input{width:100%;background:#07111f;color:var(--txt);border:1px solid #28415d;border-radius:10px;padding:10px 11px;outline:none}.field select:focus,.field input:focus{border-color:var(--cyan)}
+    .btn{background:linear-gradient(135deg,#0ea5e9,#1d4ed8);color:white;border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer;white-space:nowrap}.btn:hover{filter:brightness(1.08)}
+    .connection{grid-column:1/-1;color:var(--muted);font-size:.83rem;display:flex;gap:10px;align-items:center}.connection.ok{color:var(--green)}.connection.bad{color:var(--red)}
+    .kpis{display:grid;grid-template-columns:repeat(6,minmax(165px,1fr));gap:14px;margin-bottom:16px}.kpi{background:linear-gradient(180deg,rgba(22,36,58,.98),rgba(12,24,41,.98));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 12px 22px rgba(0,0,0,.18);position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;top:0;right:0;width:70px;height:70px;background:radial-gradient(circle,rgba(16,217,255,.16),transparent 60%)}
+    .kpi .label{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px}.kpi .value{font-size:1.55rem;font-family:Consolas,monospace;font-weight:900}.kpi .unit{font-size:.82rem;color:var(--muted);font-weight:500}.kpi .sub{font-size:.78rem;color:var(--muted);margin-top:7px}.cyan{color:var(--cyan)}.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.purple{color:var(--purple)}
+    .grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;margin-bottom:16px}.panel{background:rgba(17,29,49,.96);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 12px 24px rgba(0,0,0,.18)}.panel.large{grid-column:span 2}.panel.full{grid-column:1/-1}.panel-title{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px;font-weight:800}.panel-title small{color:var(--muted);font-weight:600}.canvas{position:relative;height:285px}.canvas.small{height:230px}.canvas.tall{height:320px}
+    .ro-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro-card{background:#0a1424;border:1px solid #21364f;border-radius:14px;padding:14px;text-align:center}.ro-card .ro-name{font-size:.82rem;color:var(--muted);font-weight:800}.ro-card .ro-val{font-size:1.65rem;font-family:Consolas,monospace;font-weight:900;margin:7px 0}.bar{height:8px;background:#18283d;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:999px}.ro-status{font-size:.74rem;color:var(--green);margin-top:7px}
+    .scada{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.unit{background:#0a1424;border:1px solid #21364f;border-radius:16px;padding:14px;position:relative}.unit .tag{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.badge{font-size:.72rem;padding:5px 8px;border-radius:999px;background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.28)}.badge.stop{background:rgba(255,59,92,.1);color:var(--red);border-color:rgba(255,59,92,.28)}
+    .process{height:150px;position:relative;background:linear-gradient(180deg,#0b1b30,#07111f);border-radius:14px;border:1px solid #19314a;overflow:hidden}.tank{position:absolute;left:18px;top:28px;width:55px;height:90px;border:3px solid #5ca9c9;border-radius:10px 10px 18px 18px;background:linear-gradient(180deg,rgba(16,217,255,.1),rgba(16,217,255,.28))}.membrane{position:absolute;right:18px;top:30px;width:78px;height:88px;border:3px solid #9fb4ca;border-radius:40px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(16,217,255,.13))}.pipe{position:absolute;height:6px;background:#4f83a8;border-radius:10px;top:72px;left:72px;right:92px}.flow{position:absolute;top:69px;left:76px;width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 15px var(--cyan);animation:flow 2s infinite linear}.unit:nth-child(2) .flow{animation-delay:.4s}.unit:nth-child(3) .flow{animation-delay:.8s}.unit:nth-child(4) .flow{animation-delay:1.2s}.unit:nth-child(5) .flow{animation-delay:1.6s}@keyframes flow{0%{transform:translateX(0);opacity:.25}45%{opacity:1}100%{transform:translateX(94px);opacity:.15}}
+    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.metric{background:#07111f;border:1px solid #19314a;border-radius:10px;padding:8px}.metric small{display:block;color:var(--muted);font-size:.68rem}.metric b{font-family:Consolas,monospace}
+    .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:.86rem}.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:right}.table th:first-child,.table td:first-child{text-align:left}.table th{color:var(--muted);font-size:.75rem;text-transform:uppercase}.note{color:var(--muted);font-size:.86rem;line-height:1.5}.hidden{display:none!important}
+    @media(max-width:1300px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr 1fr}.panel.large{grid-column:span 1}.scada{grid-template-columns:repeat(2,1fr)}.ro-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:850px){.filters{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.scada,.ro-grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.main{padding:12px}}
   </style>
 </head>
 <body>
   <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
   <aside class="sidebar" id="sidebar">
-    <div class="side-head"><div class="side-brand"><i class="fas fa-droplet"></i><span>NEXA SCADA</span></div><button class="close" onclick="toggleMenu()"><i class="fas fa-times"></i></button></div>
-    <div class="side-section">
-      <div class="side-title">Menú desplegable</div>
-      <div class="nav-item active" onclick="showView('vistaScada',this)"><i class="fas fa-diagram-project"></i> SCADA 5 Ósmosis</div>
-      <div class="nav-item" onclick="showView('vistaDashboard',this)"><i class="fas fa-chart-pie"></i> Dashboard Ejecutivo</div>
-      <div class="nav-item" onclick="showView('vistaAlarmas',this)"><i class="fas fa-triangle-exclamation"></i> Alarmas y Paros</div>
-      <div class="nav-item" onclick="showView('vistaMantto',this)"><i class="fas fa-screwdriver-wrench"></i> Mantenimiento</div>
+    <div class="side-head"><h2><i class="fas fa-sliders-h"></i> Menú SCADA</h2><button class="icon-btn" onclick="toggleMenu()"><i class="fas fa-times"></i></button></div>
+    <div class="side-sec"><div class="side-title">Navegación</div>
+      <div class="side-item ok"><small>Vista actual</small><strong>Dashboard</strong></div>
+      <div class="side-item"><small>Sistema</small><strong>5 RO</strong></div>
+      <div class="side-item"><small>Fuente de datos</small><strong>Sheets</strong></div>
     </div>
-    <div class="side-section">
-      <div class="side-title">Filtros de operación</div>
-      <label>Fecha de análisis</label>
-      <input class="date-box" type="date" id="fechaMenu" value="2025-06-25" onchange="syncFecha(this.value)">
-      <label>Turno</label>
-      <select class="select-box" id="turnoMenu" onchange="actualizarFecha()"><option value="dia">Turno Día</option><option value="noche">Turno Noche</option></select>
-      <label>Modo de planta</label>
-      <select class="select-box"><option>Automático</option><option>Manual supervisado</option><option>Mantenimiento</option></select>
+    <div class="side-sec"><div class="side-title">Alarmas</div>
+      <div class="side-item danger"><small>Turbidez alta</small><strong id="alarmTurb">0</strong></div>
+      <div class="side-item warn"><small>Días bajo meta</small><strong id="alarmMeta">0</strong></div>
+      <div class="side-item ok"><small>PLC / Com.</small><strong>OK</strong></div>
     </div>
-    <div class="side-section">
-      <div class="side-title">Resumen rápido</div>
-      <div class="mini-info"><span>Producción</span><span id="mProd">3.100 m³</span></div>
-      <div class="mini-info"><span>Cumplimiento</span><span id="mCumpl">93,2%</span></div>
-      <div class="mini-info"><span>RO activos</span><span id="mActivos">5 / 5</span></div>
-      <div class="mini-info"><span>Alarmas</span><span id="mAlarmas">0 críticas</span></div>
+    <div class="side-sec"><div class="side-title">Columnas esperadas</div>
+      <p class="note">A: Fecha<br>B: Turbidez<br>C: Producción<br>D: Meta<br>E: Recuperación<br>F: Conductividad<br>G-K: ROA a ROE<br>L-N: Agua Mar, Osmotizada, Pozos</p>
     </div>
   </aside>
 
   <main class="main">
-    <header class="header">
-      <div class="head-left"><button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button><div class="logo"><i class="fas fa-droplet"></i>NEXA</div><div class="title">SCADA Ejecutivo | Planta Desaladora</div></div>
-      <div class="head-right"><div class="chip"><i class="fas fa-calendar"></i><div><b id="fechaTxt">25-jun-2025</b><br><small>Producción del día</small></div></div><div class="chip"><span class="dot"></span><div><b id="estadoTxt">Operación estable</b><br><small>Planta en servicio</small></div></div><div class="chip"><i class="fas fa-user-shield"></i> Supervisor</div></div>
+    <header class="top">
+      <div class="brand">
+        <button class="icon-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+        <div class="logo"><i class="fas fa-water"></i></div>
+        <div><h1>Dashboard Ejecutivo | Planta Desaladora NEXA</h1><span>Control SCADA de 5 sistemas de ósmosis inversa conectado a Google Sheets</span></div>
+      </div>
+      <div class="status-pill"><span class="dot"></span><span id="plantStatus">Operación estable</span></div>
     </header>
 
-    <section class="content">
-      <div class="top-filter">
-        <div class="section-name"><h1 id="viewTitle">Vista SCADA de 5 sistemas de Ósmosis Inversa</h1><p>Vista operativa con módulos ROA, ROB, ROC, ROD y ROE, indicadores críticos y estado de producción.</p></div>
-        <div class="filter-card"><label><b>Fecha:</b></label><input type="date" id="fechaSelector" value="2025-06-25" onchange="syncFecha(this.value)"><label><b>Turno:</b></label><select id="turnoSelector" onchange="actualizarFecha()"><option value="dia">Día</option><option value="noche">Noche</option></select><small id="sheetEstado" style="color:#65748b;margin-left:8px;font-weight:700;">Sheets: conectando...</small></div>
-      </div>
+    <section class="filters">
+      <div class="field"><label>Vista de análisis</label><select id="vistaSelect" onchange="renderDashboard()"><option value="dia">Día seleccionado</option><option value="mes" selected>Mes seleccionado</option><option value="anual">Acumulado anual / mensual</option></select></div>
+      <div class="field"><label>Año</label><select id="anioSelect" onchange="onYearMonthChange()"></select></div>
+      <div class="field"><label>Mes</label><select id="mesSelect" onchange="onYearMonthChange()"></select></div>
+      <div class="field"><label>Fecha específica</label><input type="date" id="fechaSelect" onchange="renderDashboard()"></div>
+      <button class="btn" onclick="cargarSheets(true)"><i class="fas fa-sync-alt"></i> Actualizar</button>
+      <div class="connection" id="connection"><i class="fas fa-circle-notch fa-spin"></i> Conectando a Google Sheets...</div>
+    </section>
 
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-icon"><i class="fas fa-water"></i></div><div><small>Producción del día</small><strong id="kProd">3.100,0</strong><em>m³ alcanzados</em></div></div>
-        <div class="kpi red"><div class="kpi-icon"><i class="fas fa-bullseye"></i></div><div><small>Cumplimiento meta</small><strong id="kCumpl">93,2%</strong><em id="kMetaTxt">Meta no alcanzada</em></div></div>
-        <div class="kpi"><div class="kpi-icon"><i class="fas fa-arrows-rotate"></i></div><div><small>Recuperación prom.</small><strong id="kRecup">39,2%</strong><em>Promedio RO</em></div></div>
-        <div class="kpi"><div class="kpi-icon"><i class="fas fa-filter"></i></div><div><small>Turbidez promedio</small><strong id="kTurb">3,1</strong><em>NTU TK concreto</em></div></div>
-        <div class="kpi"><div class="kpi-icon"><i class="fas fa-wave-square"></i></div><div><small>Conductividad EST. 1</small><strong id="kCond">1.380</strong><em>µS/cm en línea</em></div></div>
-        <div class="kpi green"><div class="kpi-icon"><i class="fas fa-shield-halved"></i></div><div><small>Estado de planta</small><strong id="kEstado">Estable</strong><em id="kAlarm">Sin alarmas críticas</em></div></div>
-      </div>
+    <section class="kpis">
+      <div class="kpi"><div class="label">Producción del período</div><div class="value cyan" id="kpiProduccion">-- <span class="unit">m³</span></div><div class="sub" id="subProduccion">Según filtro</div></div>
+      <div class="kpi"><div class="label">Cumplimiento de meta</div><div class="value" id="kpiCumplimiento">-- <span class="unit">%</span></div><div class="sub">Producción / meta</div></div>
+      <div class="kpi"><div class="label">Turbidez promedio</div><div class="value purple" id="kpiTurbidez">-- <span class="unit">NTU</span></div><div class="sub">Desde columna B</div></div>
+      <div class="kpi"><div class="label">Conductividad prom.</div><div class="value yellow" id="kpiConductividad">-- <span class="unit">µS/cm</span></div><div class="sub">Si existe columna F</div></div>
+      <div class="kpi"><div class="label">Recuperación prom.</div><div class="value green" id="kpiRecuperacion">-- <span class="unit">%</span></div><div class="sub">Si existe columna E</div></div>
+      <div class="kpi"><div class="label">Registros cargados</div><div class="value" id="kpiRegistros">0</div><div class="sub">Filas válidas desde A7</div></div>
+    </section>
 
-      <div id="vistaScada">
-        <div class="grid">
-          <div class="left-col">
-            <div class="card">
-              <div class="card-head">Resumen de agua y caudales</div>
-              <div class="card-body"><div class="summary-list">
-                <div class="summary-row"><i class="fas fa-water"></i><span>Totalizador agua de mar</span><b id="sAguaMar">12.050,0 m³</b></div>
-                <div class="summary-row"><i class="fas fa-droplet"></i><span>Promedio agua osmotizada</span><b id="sOsm">3.600,1 m³</b></div>
-                <div class="summary-row"><i class="fas fa-gauge-high"></i><span>Caudal total TK</span><b id="sTk">135 lps</b></div>
-                <div class="summary-row"><i class="fas fa-faucet-drip"></i><span>Suministro de pozos</span><b id="sPozos">820,0 m³</b></div>
-                <div class="summary-row"><i class="fas fa-file-lines"></i><span>Totalizador UFN</span><b id="sUfn">3.400 m³</b></div>
-                <div class="summary-row"><i class="fas fa-file-lines"></i><span>Totalizador UFI</span><b id="sUfi">5.300 m³</b></div>
-              </div><div class="mini-grid"><div class="tagbox"><small>TK NUEVO</small><b>95,00%</b></div><div class="tagbox"><small>REC. NUEVO</small><b>85,00%</b></div><div class="tagbox"><small>TK ANTIGUO</small><b>96,00%</b></div><div class="tagbox"><small>REC. ANTIGUO</small><b>95,00%</b></div></div></div>
-            </div>
-            <div class="card" style="margin-top:14px"><div class="card-head">Conductividad estación 1</div><div class="card-body"><div class="gaugeBox"><div><div class="gauge"><div class="needle"></div></div><div class="gaugeVal"><b id="gCond">1.380</b> <span>µS/cm</span><br><span style="color:var(--green)"><i class="fas fa-circle" style="font-size:9px"></i> En línea</span></div></div></div></div></div>
-          </div>
+    <section class="panel full">
+      <div class="panel-title"><span><i class="fas fa-industry"></i> Vista SCADA de 5 sistemas RO</span><small>ROA - ROB - ROC - ROD - ROE</small></div>
+      <div class="scada" id="scadaUnits"></div>
+    </section>
 
-          <div class="card scada-panel">
-            <div class="card-head">SCADA operativo - 5 sistemas de ósmosis inversa</div>
-            <div class="scada-wrap"><div class="ro-grid" id="roGrid"></div></div>
-          </div>
-        </div>
+    <section class="grid">
+      <div class="panel large"><div class="panel-title"><span>Producción diaria del mes</span><small>Barras por día</small></div><div class="canvas tall"><canvas id="chartProduccionDia"></canvas></div></div>
+      <div class="panel"><div class="panel-title"><span>Producción vs meta</span><small>Período filtrado</small></div><div class="canvas tall"><canvas id="chartMeta"></canvas></div></div>
+      <div class="panel full"><div class="panel-title"><span>Producción acumulada mensual</span><small>Avance día a día</small></div><div class="canvas"><canvas id="chartAcumulado"></canvas></div></div>
+    </section>
 
-        <div class="lower">
-          <div class="card chart-card"><div class="card-head">Producción diaria vs meta</div><div class="canvas"><canvas id="chartMeta"></canvas></div></div>
-          <div class="card chart-card"><div class="card-head">Turbidez TK concreto (NTU)</div><div class="canvas"><canvas id="chartTurb"></canvas></div></div>
-          <div class="card chart-card"><div class="card-head">Conductividad módulos (µS/cm)</div><div class="canvas"><canvas id="chartCond"></canvas></div></div>
-          <div class="card chart-card"><div class="card-head">Volumen módulos + pozo 1 y 4 (m³)</div><div class="canvas"><canvas id="chartVol"></canvas></div></div>
-        </div>
-      </div>
+    <section class="grid">
+      <div class="panel"><div class="panel-title"><span>Turbidez diaria del mes</span><small>Límite ref. 5 NTU</small></div><div class="canvas"><canvas id="chartTurbidez"></canvas></div></div>
+      <div class="panel"><div class="panel-title"><span>Conductividad diaria</span><small>Si existe dato</small></div><div class="canvas"><canvas id="chartConductividad"></canvas></div></div>
+      <div class="panel"><div class="panel-title"><span>Recuperación ROA - ROE</span><small>Promedio del filtro</small></div><div class="ro-grid" id="roCards"></div></div>
+    </section>
 
-      <div id="vistaDashboard" class="hidden"><div class="card chart-card tall"><div class="card-head">Dashboard ejecutivo consolidado</div><div class="canvas"><canvas id="chartExec"></canvas></div></div></div>
-      <div id="vistaAlarmas" class="hidden"><div class="card"><div class="card-head">Alarmas y paros</div><div class="card-body" id="alarmList"></div></div></div>
-      <div id="vistaMantto" class="hidden"><div class="card"><div class="card-head">Mantenimiento y acciones recomendadas</div><div class="card-body"><div class="summary-list"><div class="summary-row"><i class="fas fa-screwdriver-wrench"></i><span>Inspección de bombas de alta presión RO</span><b>Pendiente</b></div><div class="summary-row"><i class="fas fa-bolt"></i><span>Verificación de VFD y corriente de motor</span><b>Programado</b></div><div class="summary-row"><i class="fas fa-filter"></i><span>Lavado químico según tendencia de recuperación</span><b>Evaluar</b></div><div class="summary-row"><i class="fas fa-file-signature"></i><span>Validar registros de turno y caudales</span><b>Diario</b></div></div></div></div></div>
+    <section class="grid">
+      <div class="panel large"><div class="panel-title"><span>Producción mensual Enero - Diciembre</span><small>Hasta el mes actual</small></div><div class="canvas"><canvas id="chartMensual"></canvas></div></div>
+      <div class="panel"><div class="panel-title"><span>Promedios mensuales de calidad</span><small>Turbidez y recuperación</small></div><div class="canvas"><canvas id="chartCalidadMes"></canvas></div></div>
+      <div class="panel full"><div class="panel-title"><span>Resumen mensual</span><small>Totales y promedios por mes</small></div><div class="table-wrap"><table class="table" id="tablaMeses"><thead><tr><th>Mes</th><th>Producción</th><th>Meta</th><th>Cump.</th><th>Turbidez</th><th>Conduct.</th><th>Recup.</th><th>Días</th></tr></thead><tbody></tbody></table></div></div>
     </section>
   </main>
 
 <script>
-Chart.defaults.color='#65748b';Chart.defaults.font.family='Segoe UI';Chart.defaults.scale.grid.color='rgba(15,45,85,.08)';
-const fmt=(n,d=1)=>Number(n).toLocaleString('es-PE',{minimumFractionDigits:d,maximumFractionDigits:d});
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTid2z1F-w3ShKdbW0Ig16Wyr6UfyA1e-szpOPF_6f3pqLUz2oAcQK-KrZMISb7SpGUvP8Y5EBYLrJ7/pub?gid=501238155&single=true&output=csv";
+const START_ROW_INDEX = 6; // fila 7 real de Google Sheets
+const MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+let rows = [];
+let charts = {};
 
-// === CONEXIÓN CON GOOGLE SHEETS ===
-// La hoja publicada en CSV tiene:
-// Columna A desde fila 7 = Fecha
-// Columna B desde fila 7 = Turbidez
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTid2z1F-w3ShKdbW0Ig16Wyr6UfyA1e-szpOPF_6f3pqLUz2oAcQK-KrZMISb7SpGUvP8Y5EBYLrJ7/pub?gid=501238155&single=true&output=csv';
-let sheetTurbidez = [];
-
-function parseCSV(text){
-  // Lector CSV compatible con comillas, saltos de línea y comas dentro de celdas.
-  const rows=[];
-  let row=[];
-  let cur='';
-  let quoted=false;
-  for(let i=0;i<text.length;i++){
-    const c=text[i];
-    const next=text[i+1];
-    if(c==='"'){
-      if(quoted && next==='"'){
-        cur+='"';
-        i++;
-      }else{
-        quoted=!quoted;
-      }
-    }else if(c===',' && !quoted){
-      row.push(cur);
-      cur='';
-    }else if((c==='\n' || c==='\r') && !quoted){
-      if(c==='\r' && next==='\n') i++;
-      row.push(cur);
-      rows.push(row);
-      row=[];
-      cur='';
-    }else{
-      cur+=c;
-    }
-  }
-  if(cur.length || row.length){
-    row.push(cur);
-    rows.push(row);
-  }
-  return rows;
-}
-
-function normalizarFecha(valor){
-  if(!valor) return '';
-  valor = String(valor).trim();
-  if(/^\d{4}-\d{2}-\d{2}$/.test(valor)) return valor;
-  let m = valor.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
-  if(m){
-    let d=m[1].padStart(2,'0'), mo=m[2].padStart(2,'0'), y=m[3];
-    if(y.length===2) y='20'+y;
-    return `${y}-${mo}-${d}`;
-  }
-  const dt = new Date(valor);
-  if(!isNaN(dt)) return dt.toISOString().slice(0,10);
-  return '';
-}
-
-function num(valor){
-  if(valor===undefined || valor===null) return NaN;
-  let s = String(valor).trim().replace(/\s/g,'');
-  if(!s) return NaN;
-  // Soporta formatos: 3.1 | 3,1 | 1,234.5 | 1.234,5
-  if(s.includes(',') && s.includes('.')){
-    if(s.lastIndexOf(',') > s.lastIndexOf('.')){
-      s = s.replace(/\./g,'').replace(',', '.');
-    }else{
-      s = s.replace(/,/g,'');
-    }
-  }else if(s.includes(',')){
-    s = s.replace(',', '.');
-  }
-  const n = Number(s);
-  return Number.isFinite(n) ? n : NaN;
-}
-
-
-async function cargarDatosSheets(){
-  const estado = document.getElementById('sheetEstado');
-  try{
-    const res = await fetch(SHEET_URL + '&cache=' + Date.now());
-    const text = await res.text();
-    const rows = parseCSV(text);
-    // Fila 7 equivale al índice 6. Columna A índice 0. Columna B índice 1.
-    sheetTurbidez = rows.slice(6)
-      .map(r => ({ fecha: normalizarFecha(r[0]), turbidez: num(r[1]) }))
-      .filter(r => r.fecha && !isNaN(r.turbidez));
-
-    sheetTurbidez.sort((a,b)=>a.fecha.localeCompare(b.fecha));
-    if(sheetTurbidez.length){
-      const fechas = sheetTurbidez.map(r=>r.fecha);
-      document.getElementById('fechaSelector').min = fechas[0];
-      document.getElementById('fechaSelector').max = fechas[fechas.length-1];
-      document.getElementById('fechaMenu').min = fechas[0];
-      document.getElementById('fechaMenu').max = fechas[fechas.length-1];
-      if(!sheetTurbidez.some(r=>r.fecha===document.getElementById('fechaSelector').value)){
-        syncFecha(fechas[fechas.length-1]);
-      }
-      if(estado) estado.innerText = `Sheets: ${sheetTurbidez.length} registros cargados`;
-    } else {
-      if(estado) estado.innerText = 'Sheets: sin datos desde A7:B';
-    }
-  }catch(e){
-    console.error(e);
-    if(estado) estado.innerText = 'Sheets: no conectado';
-  }
-}
-
-function turbidezPorFecha(fecha){
-  if(!sheetTurbidez.length) return null;
-  const idx = sheetTurbidez.findIndex(r => r.fecha === fecha);
-  if(idx < 0) return null;
-  const ini = Math.max(0, idx - 11);
-  const serie = sheetTurbidez.slice(ini, idx + 1);
-  return {
-    valor: sheetTurbidez[idx].turbidez,
-    labels: serie.map(r => r.fecha.slice(5).replace('-', '/')),
-    data: serie.map(r => r.turbidez)
-  };
-}
-
-const datos={
- '2025-06-25':{dia:{prod:3100,meta:3326,recup:39.2,turb:3.1,cond:1380,agua:12050,osm:3600.1,tk:135,pozos:820,ufn:3400,ufi:5300,ro:[40,35,42,38,41],pres:[810,795,822,790,830],caudal:[145,139,148,141,150],vol:[900,850,720,870,1000,700,120],turbSerie:[3.3,4.1,4.2,4.0,4.1,5.1,2.1,4.5,2.0,3.8,2.1,1.1],condMod:[1150,1190,1260,830,590],alarmas:['Meta de producción no alcanzada','Turbidez puntual alta en hora 06']},noche:{prod:3370,meta:3326,recup:41.8,turb:2.7,cond:1320,agua:12180,osm:3720,tk:142,pozos:850,ufn:3490,ufi:5410,ro:[43,41,42,40,43],pres:[805,800,818,812,826],caudal:[150,147,149,146,152],vol:[940,890,760,910,1040,720,150],turbSerie:[2.8,3.1,3.0,3.3,2.9,3.1,2.5,2.7,2.8,2.4,2.5,2.3],condMod:[1120,1160,1190,850,620],alarmas:[]}},
- '2025-06-26':{dia:{prod:3250,meta:3326,recup:40.5,turb:2.9,cond:1350,agua:12300,osm:3680,tk:140,pozos:845,ufn:3460,ufi:5360,ro:[41,39,43,40,42],pres:[800,792,810,806,820],caudal:[148,144,150,145,151],vol:[920,870,780,890,1010,710,130],turbSerie:[2.9,3.4,3.1,3.6,3.2,3.7,2.8,3.2,2.6,3.1,2.8,2.5],condMod:[1130,1170,1210,860,610],alarmas:['Cumplimiento cerca al límite']},noche:{prod:3420,meta:3326,recup:42.1,turb:2.4,cond:1295,agua:12420,osm:3790,tk:145,pozos:870,ufn:3520,ufi:5480,ro:[44,42,43,41,44],pres:[798,790,808,805,815],caudal:[152,149,151,148,154],vol:[960,910,800,930,1050,730,155],turbSerie:[2.4,2.6,2.5,2.7,2.3,2.8,2.2,2.4,2.5,2.1,2.2,2.0],condMod:[1080,1120,1160,810,580],alarmas:[]}},
- '2025-06-27':{dia:{prod:2920,meta:3326,recup:36.8,turb:4.2,cond:1460,agua:11820,osm:3420,tk:128,pozos:760,ufn:3210,ufi:5100,ro:[38,34,40,0,39],pres:[830,812,840,0,842],caudal:[139,132,144,0,145],vol:[850,800,680,0,930,660,90],turbSerie:[4.1,4.8,4.3,5.2,4.7,5.5,4.2,4.9,4.0,4.6,4.1,3.8],condMod:[1260,1320,1410,0,720],alarmas:['ROD detenido por baja recuperación','Conductividad sobre límite recomendado','Meta de producción no alcanzada']},noche:{prod:3180,meta:3326,recup:39.4,turb:3.3,cond:1375,agua:12020,osm:3610,tk:136,pozos:810,ufn:3380,ufi:5250,ro:[41,38,41,32,45],pres:[808,798,815,780,826],caudal:[146,141,147,118,153],vol:[900,850,740,610,1010,700,115],turbSerie:[3.3,3.6,3.5,3.7,3.2,4.0,3.0,3.4,3.1,3.3,3.0,2.8],condMod:[1160,1200,1250,980,630],alarmas:['ROD recuperado en observación']}}
-};
-const roNames=['ROA','ROB','ROC','ROD','ROE']; let chartMeta,chartTurb,chartCond,chartVol,chartExec;
 function toggleMenu(){document.getElementById('sidebar').classList.toggle('active');document.getElementById('overlay').classList.toggle('active')}
-function syncFecha(v){document.getElementById('fechaSelector').value=v;document.getElementById('fechaMenu').value=v;actualizarFecha()}
-function showView(id,el){['vistaScada','vistaDashboard','vistaAlarmas','vistaMantto'].forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('viewTitle').innerText=el.innerText.trim();setTimeout(()=>{if(chartExec)chartExec.resize()},100);}
-function getData(){const f=document.getElementById('fechaSelector').value;const t=document.getElementById('turnoSelector').value;document.getElementById('turnoMenu').value=t;return datos[f]?.[t]||datos['2025-06-25'].dia}
-function roCard(n,i,d){let r=d.ro[i],stop=r<=0,st=stop?'stop':r<36?'warn':'run',txt=stop?'Detenido':r<36?'Observación':'Estable';return `<div class="ro-card"><div class="ro-head"><div class="ro-title">${n}</div><div class="status ${st}">${txt}</div></div><div class="process"><div class="tank"></div><div class="pipe p1"></div><div class="pump"><i class="fas fa-rotate"></i></div><div class="pipe p2"></div><div class="membrane"></div><div class="pipe p3"></div><div class="valve v1" style="background:${stop?'#e53935':'#11b76b'}"></div><div class="valve v2" style="background:${stop?'#e53935':'#11b76b'}"></div><span class="flow">➜</span><span class="flow f2">➜</span><span class="flow f3">➜</span></div><div class="ro-metrics"><div class="metric ${stop?'alert':''}"><small>Recuperación</small><b>${r}%</b></div><div class="metric"><small>Presión</small><b>${d.pres[i]} psi</b></div><div class="metric"><small>Caudal</small><b>${d.caudal[i]} m³/h</b></div><div class="metric"><small>Modo</small><b>${stop?'Paro':'Auto'}</b></div></div></div>`}
-function initCharts(){chartMeta=new Chart(document.getElementById('chartMeta'),{type:'doughnut',data:{labels:['Alcanzado','Faltante'],datasets:[{data:[93,7],backgroundColor:['#0b73ce','#e8eef6'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom'}}}});chartTurb=new Chart(document.getElementById('chartTurb'),{type:'bar',data:{labels:['01','02','03','04','05','06','07','08','09','10','11','12'],datasets:[{label:'Turbidez NTU',data:[],backgroundColor:'#0b73ce',borderRadius:6},{label:'Límite 5 NTU',type:'line',data:Array(12).fill(5),borderColor:'#e53935',borderDash:[6,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:6}}}});chartCond=new Chart(document.getElementById('chartCond'),{type:'bar',data:{labels:['A','B','C','D','E'],datasets:[{label:'Conductividad',data:[],backgroundColor:['#f5a623','#6eb5d0','#2e86ab','#8b6a9e','#d6cba5'],borderRadius:6},{label:'Límite 1400',type:'line',data:Array(5).fill(1400),borderColor:'#e53935',borderDash:[6,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:1600}}}});chartVol=new Chart(document.getElementById('chartVol'),{type:'bar',data:{labels:['ROA','ROB','ROC','ROD','ROE','P1','P4'],datasets:[{label:'Volumen m³',data:[],backgroundColor:['#f5a623','#9bd3e6','#2e86ab','#8b6a9e','#b9bb79','#cce7a3','#183a68'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:1200}}}});chartExec=new Chart(document.getElementById('chartExec'),{type:'line',data:{labels:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],datasets:[{label:'Producción m³',data:[3100,3250,2920,3370,3420,3180,3300],borderColor:'#0b73ce',backgroundColor:'rgba(11,115,206,.12)',fill:true,tension:.35},{label:'Meta',data:[3326,3326,3326,3326,3326,3326,3326],borderColor:'#e53935',borderDash:[6,5],pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:false}}}})}
-async function actualizarFecha(){
-  const f=document.getElementById('fechaSelector').value,t=document.getElementById('turnoSelector').value;
-  document.getElementById('fechaMenu').value=f;
-  document.getElementById('turnoMenu').value=t;
-
-  let d={...getData()};
-  const turbSheet = turbidezPorFecha(f);
-  if(turbSheet){
-    d.turb = turbSheet.valor;
-    d.turbSerie = turbSheet.data;
-  }
-
-  const cumpl=d.prod/d.meta*100;
-  document.getElementById('fechaTxt').innerText=new Date(f+'T00:00:00').toLocaleDateString('es-PE',{day:'2-digit',month:'short',year:'numeric'});
-  document.getElementById('kProd').innerText=fmt(d.prod,1);
-  document.getElementById('kCumpl').innerText=fmt(cumpl,1)+'%';
-  document.getElementById('kRecup').innerText=fmt(d.recup,1)+'%';
-  document.getElementById('kTurb').innerText=fmt(d.turb,1);
-  document.getElementById('kCond').innerText=fmt(d.cond,0);
-  document.getElementById('gCond').innerText=fmt(d.cond,0);
-  document.getElementById('kMetaTxt').innerText=cumpl>=100?'Meta alcanzada':'Meta no alcanzada';
-  document.querySelector('.kpi.red')?.classList.toggle('green',cumpl>=100);
-  document.getElementById('kEstado').innerText=d.alarmas.length>1?'Observación':'Estable';
-  document.getElementById('kAlarm').innerText=d.alarmas.length?d.alarmas.length+' alarma(s) operativas':'Sin alarmas críticas';
-  document.getElementById('estadoTxt').innerText=d.alarmas.length>1?'Operación en observación':'Operación estable';
-  document.getElementById('sAguaMar').innerText=fmt(d.agua,1)+' m³';
-  document.getElementById('sOsm').innerText=fmt(d.osm,1)+' m³';
-  document.getElementById('sTk').innerText=d.tk+' lps';
-  document.getElementById('sPozos').innerText=fmt(d.pozos,1)+' m³';
-  document.getElementById('sUfn').innerText=fmt(d.ufn,0)+' m³';
-  document.getElementById('sUfi').innerText=fmt(d.ufi,0)+' m³';
-  document.getElementById('mProd').innerText=fmt(d.prod,0)+' m³';
-  document.getElementById('mCumpl').innerText=fmt(cumpl,1)+'%';
-  document.getElementById('mActivos').innerText=d.ro.filter(x=>x>0).length+' / 5';
-  document.getElementById('mAlarmas').innerText=d.alarmas.length+' alarma(s)';
-  document.getElementById('roGrid').innerHTML=roNames.map((r,i)=>roCard(r,i,d)).join('');
-
-  chartMeta.data.datasets[0].data=[Math.min(cumpl,100),Math.max(0,100-cumpl)];
-  chartMeta.data.datasets[0].backgroundColor=[cumpl>=100?'#11b76b':'#e53935','#e8eef6'];
-  chartMeta.update();
-
-  if(turbSheet){
-    chartTurb.data.labels = turbSheet.labels;
-    chartTurb.data.datasets[1].data = Array(turbSheet.labels.length).fill(5);
-  } else {
-    chartTurb.data.labels = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-    chartTurb.data.datasets[1].data = Array(12).fill(5);
-  }
-  chartTurb.data.datasets[0].data=d.turbSerie;
-  chartTurb.update();
-
-  chartCond.data.datasets[0].data=d.condMod;
-  chartCond.update();
-  chartVol.data.datasets[0].data=d.vol;
-  chartVol.update();
-
-  document.getElementById('alarmList').innerHTML=d.alarmas.length?d.alarmas.map(a=>`<div class="summary-row"><i class="fas fa-triangle-exclamation" style="color:#e53935"></i><span>${a}</span><b>Revisar</b></div>`).join(''):'<div class="summary-row"><i class="fas fa-circle-check" style="color:#11b76b"></i><span>No se registran alarmas críticas para esta fecha y turno.</span><b>OK</b></div>';
-}
-
-window.onload=async()=>{initCharts();await cargarDatosSheets();actualizarFecha()}
-
+function setConn(msg,type=''){const el=document.getElementById('connection');el.className='connection '+type;el.innerHTML=msg}
+function num(v){ if(v===undefined||v===null) return null; let s=String(v).trim().replace(/\s/g,''); if(!s) return null; s=s.replace(/%/g,'').replace(/m³|NTU|µS\/cm|uS\/cm|hrs/gi,''); if(s.includes(',')&&s.includes('.')){s=s.replace(/\./g,'').replace(',', '.')} else if(s.includes(',')){s=s.replace(',', '.')} const n=parseFloat(s); return isNaN(n)?null:n; }
+function fmt(n,d=1){return n===null||n===undefined||isNaN(n)?'--':Number(n).toLocaleString('es-PE',{maximumFractionDigits:d,minimumFractionDigits:d})}
+function sum(arr,key){return arr.reduce((a,r)=>a+(num(r[key])||0),0)}
+function avg(arr,key){const vals=arr.map(r=>num(r[key])).filter(v=>v!==null&&!isNaN(v));return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+function parseCSV(text){const out=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'&&q&&n==='"'){cur+='"';i++;continue}if(c==='"'){q=!q;continue}if(c===','&&!q){row.push(cur);cur='';continue}if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cur);if(row.some(x=>String(x).trim()!==''))out.push(row);row=[];cur='';continue}cur+=c}row.push(cur);if(row.some(x=>String(x).trim()!==''))out.push(row);return out}
+function parseDate(v){ if(!v) return null; let s=String(v).trim(); if(!s) return null; if(/^\d{4}-\d{2}-\d{2}/.test(s)){const [y,m,d]=s.slice(0,10).split('-').map(Number);return new Date(y,m-1,d)} const parts=s.split(/[\/\-\.]/).map(x=>x.trim()); if(parts.length>=3){let d=Number(parts[0]),m=Number(parts[1]),y=Number(parts[2]); if(parts[0].length===4){y=Number(parts[0]);m=Number(parts[1]);d=Number(parts[2])} if(y<100)y+=2000; if(d&&m&&y)return new Date(y,m-1,d)} const dt=new Date(s);return isNaN(dt)?null:dt }
+function isoDate(d){return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`:''}
+function mapRow(r){const d=parseDate(r[0]);return {fecha:d,fechaISO:isoDate(d),turbidez:num(r[1]),produccion:num(r[2]),meta:num(r[3]),recuperacion:num(r[4]),conductividad:num(r[5]),ROA:num(r[6]),ROB:num(r[7]),ROC:num(r[8]),ROD:num(r[9]),ROE:num(r[10]),aguaMar:num(r[11]),aguaOsmotizada:num(r[12]),pozos:num(r[13])}}
+async function cargarSheets(force=false){try{setConn('<i class="fas fa-circle-notch fa-spin"></i> Conectando a Google Sheets...');const url=SHEET_URL+'&cacheBust='+(force?Date.now():Math.floor(Date.now()/300000));const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const raw=parseCSV(text);rows=raw.slice(START_ROW_INDEX).map(mapRow).filter(r=>r.fecha);if(!rows.length)throw new Error('No se encontraron fechas válidas desde A7');rows.sort((a,b)=>a.fecha-b.fecha);initFilters();setConn(`<i class="fas fa-check-circle"></i> Sheets conectado: ${rows.length} registros cargados desde A7`, 'ok');renderDashboard()}catch(e){console.error(e);setConn(`<i class="fas fa-exclamation-triangle"></i> No conecta al Sheets: ${e.message}. Revisa que esté publicado como CSV y que A7 tenga fechas.`, 'bad')}}
+function initFilters(){const years=[...new Set(rows.map(r=>r.fecha.getFullYear()))].sort((a,b)=>b-a);const anioSel=document.getElementById('anioSelect');const mesSel=document.getElementById('mesSelect');const fechaSel=document.getElementById('fechaSelect');anioSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');mesSel.innerHTML=MONTHS.map((m,i)=>`<option value="${i}">${m}</option>`).join('');const last=rows[rows.length-1];anioSel.value=last.fecha.getFullYear();mesSel.value=last.fecha.getMonth();fechaSel.value=last.fechaISO;}
+function onYearMonthChange(){const y=Number(document.getElementById('anioSelect').value),m=Number(document.getElementById('mesSelect').value);const first=rows.find(r=>r.fecha.getFullYear()===y&&r.fecha.getMonth()===m);if(first)document.getElementById('fechaSelect').value=first.fechaISO;renderDashboard()}
+function chart(id,type,data,options={}){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8ea3ba'}},...(options.plugins||{})},scales:{x:{ticks:{color:'#8ea3ba'},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#8ea3ba'},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true},...(options.scales||{})}}});return charts[id]}
+function selectedData(){const vista=document.getElementById('vistaSelect').value;const y=Number(document.getElementById('anioSelect').value);const m=Number(document.getElementById('mesSelect').value);const f=document.getElementById('fechaSelect').value;if(vista==='dia')return rows.filter(r=>r.fechaISO===f);if(vista==='anual')return rows.filter(r=>r.fecha.getFullYear()===y);return rows.filter(r=>r.fecha.getFullYear()===y&&r.fecha.getMonth()===m)}
+function rowsMonth(){const y=Number(document.getElementById('anioSelect').value);const m=Number(document.getElementById('mesSelect').value);return rows.filter(r=>r.fecha.getFullYear()===y&&r.fecha.getMonth()===m)}
+function monthGroups(){const y=Number(document.getElementById('anioSelect').value);return MONTHS.map((name,i)=>({name,idx:i,data:rows.filter(r=>r.fecha.getFullYear()===y&&r.fecha.getMonth()===i)})).filter(g=>g.data.length)}
+function renderDashboard(){if(!rows.length)return;const data=selectedData();const monthData=rowsMonth();const groups=monthGroups();const prod=sum(data,'produccion');const meta=sum(data,'meta');const turb=avg(data,'turbidez');const cond=avg(data,'conductividad');const rec=avg(data,'recuperacion');const cump=meta?prod/meta*100:null;document.getElementById('kpiProduccion').innerHTML=`${fmt(prod,1)} <span class="unit">m³</span>`;document.getElementById('kpiCumplimiento').innerHTML=`${fmt(cump,1)} <span class="unit">%</span>`;document.getElementById('kpiCumplimiento').className='value '+(cump!==null&&cump<95?'red':'green');document.getElementById('kpiTurbidez').innerHTML=`${fmt(turb,2)} <span class="unit">NTU</span>`;document.getElementById('kpiConductividad').innerHTML=`${fmt(cond,0)} <span class="unit">µS/cm</span>`;document.getElementById('kpiRecuperacion').innerHTML=`${fmt(rec,1)} <span class="unit">%</span>`;document.getElementById('kpiRegistros').innerText=data.length;document.getElementById('subProduccion').innerText=document.getElementById('vistaSelect').selectedOptions[0].text;
+  const alarmT=data.filter(r=>num(r.turbidez)>5).length;const alarmM=data.filter(r=>(num(r.meta)||0)>0&&(num(r.produccion)||0)<(num(r.meta)||0)).length;document.getElementById('alarmTurb').innerText=alarmT;document.getElementById('alarmMeta').innerText=alarmM;document.getElementById('plantStatus').innerText=alarmT>0?'Revisar turbidez':'Operación estable';
+  renderSCADA(data);renderRO(data);renderDailyCharts(monthData);renderMonthlyCharts(groups);renderTable(groups);}
+function renderSCADA(data){const ros=['ROA','ROB','ROC','ROD','ROE'];const cont=document.getElementById('scadaUnits');cont.innerHTML=ros.map(ro=>{const v=avg(data,ro);const stop=(v!==null&&v<20);return `<div class="unit"><div class="tag"><strong>${ro}</strong><span class="badge ${stop?'stop':''}">${stop?'PARO':'ONLINE'}</span></div><div class="process"><div class="tank"></div><div class="pipe"></div><div class="flow"></div><div class="membrane"></div></div><div class="metrics"><div class="metric"><small>Recuperación</small><b>${fmt(v,1)}%</b></div><div class="metric"><small>Estado</small><b class="${stop?'red':'green'}">${stop?'Bajo':'Normal'}</b></div></div></div>`}).join('')}
+function renderRO(data){const ros=['ROA','ROB','ROC','ROD','ROE'];document.getElementById('roCards').innerHTML=ros.map(ro=>{const v=avg(data,ro);const p=Math.max(0,Math.min(100,v||0));return `<div class="ro-card"><div class="ro-name">${ro}</div><div class="ro-val ${p<20?'red':'cyan'}">${fmt(v,1)}%</div><div class="bar"><span style="width:${p}%"></span></div><div class="ro-status">${p<20?'Revisar':'Estable'}</div></div>`}).join('')}
+function renderDailyCharts(mdata){const labels=mdata.map(r=>String(r.fecha.getDate()).padStart(2,'0'));const prod=mdata.map(r=>num(r.produccion));const meta=mdata.map(r=>num(r.meta));const turb=mdata.map(r=>num(r.turbidez));const cond=mdata.map(r=>num(r.conductividad));const acc=[];prod.reduce((a,v,i)=>{acc[i]=a+(v||0);return acc[i]},0);
+  chart('chartProduccionDia','bar',{labels,datasets:[{label:'Producción m³',data:prod,backgroundColor:'rgba(16,217,255,.72)',borderColor:'#10d9ff',borderWidth:1},{label:'Meta m³',type:'line',data:meta,borderColor:'#ffcc00',borderDash:[7,5],pointRadius:1,tension:.25}]},{scales:{y:{beginAtZero:true}}});
+  const totalProd=prod.reduce((a,b)=>a+(b||0),0), totalMeta=meta.reduce((a,b)=>a+(b||0),0);chart('chartMeta','doughnut',{labels:['Producción','Faltante'],datasets:[{data:[totalProd,Math.max(totalMeta-totalProd,0)],backgroundColor:[totalProd>=totalMeta?'#00e676':'#ff3b5c','#243953'],borderWidth:0,cutout:'72%'}]},{plugins:{tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw,1)} m³`}}}});
+  chart('chartAcumulado','line',{labels,datasets:[{label:'Producción acumulada',data:acc,borderColor:'#00e676',backgroundColor:'rgba(0,230,118,.08)',fill:true,tension:.25},{label:'Meta acumulada',data:meta.reduce((arr,v,i)=>{arr[i]=(arr[i-1]||0)+(v||0);return arr},[]),borderColor:'#ffcc00',borderDash:[6,5],pointRadius:0,tension:.2}]});
+  chart('chartTurbidez','line',{labels,datasets:[{label:'Turbidez NTU',data:turb,borderColor:'#b388ff',backgroundColor:'rgba(179,136,255,.12)',fill:true,tension:.25},{label:'Límite 5 NTU',data:labels.map(()=>5),borderColor:'#ff3b5c',borderDash:[7,5],pointRadius:0}]});
+  chart('chartConductividad','bar',{labels,datasets:[{label:'Conductividad µS/cm',data:cond,backgroundColor:'rgba(255,204,0,.72)',borderColor:'#ffcc00',borderWidth:1}]});}
+function renderMonthlyCharts(groups){const labels=groups.map(g=>g.name);const prod=groups.map(g=>sum(g.data,'produccion'));const meta=groups.map(g=>sum(g.data,'meta'));const turb=groups.map(g=>avg(g.data,'turbidez'));const rec=groups.map(g=>avg(g.data,'recuperacion'));
+  chart('chartMensual','bar',{labels,datasets:[{label:'Producción mensual',data:prod,backgroundColor:'rgba(59,130,246,.75)',borderColor:'#3b82f6',borderWidth:1},{label:'Meta mensual',type:'line',data:meta,borderColor:'#ffcc00',borderDash:[7,5],pointRadius:3,tension:.25}]});
+  chart('chartCalidadMes','line',{labels,datasets:[{label:'Turbidez prom. NTU',data:turb,borderColor:'#b388ff',backgroundColor:'rgba(179,136,255,.08)',fill:true,tension:.25},{label:'Recuperación prom. %',data:rec,borderColor:'#00e676',backgroundColor:'rgba(0,230,118,.07)',fill:true,tension:.25,yAxisID:'y1'}]},{scales:{y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#8ea3ba'},beginAtZero:true}}});}
+function renderTable(groups){const tbody=document.querySelector('#tablaMeses tbody');tbody.innerHTML=groups.map(g=>{const p=sum(g.data,'produccion'),m=sum(g.data,'meta'),c=m?p/m*100:null;return `<tr><td>${g.name}</td><td>${fmt(p,1)}</td><td>${fmt(m,1)}</td><td class="${c!==null&&c<95?'red':'green'}">${fmt(c,1)}%</td><td>${fmt(avg(g.data,'turbidez'),2)}</td><td>${fmt(avg(g.data,'conductividad'),0)}</td><td>${fmt(avg(g.data,'recuperacion'),1)}%</td><td>${g.data.length}</td></tr>`}).join('')}
+Chart.defaults.color='#8ea3ba';Chart.defaults.font.family='Segoe UI, Arial, sans-serif';Chart.defaults.scale.grid.color='rgba(255,255,255,.05)';
+window.addEventListener('load',()=>cargarSheets(false));
 </script>
 </body>
 </html>
