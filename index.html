@@ -27,9 +27,9 @@
     .topbar{background:rgba(17,28,46,.96);border:1px solid var(--border);border-radius:16px;padding:15px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:var(--shadow);position:sticky;top:10px;z-index:10;backdrop-filter:blur(10px)}
     .brand{display:flex;align-items:center;gap:14px}.menu-btn{border:0;background:#0b1220;color:var(--cyan);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:1.15rem}.brand h1{font-size:1.12rem;letter-spacing:.4px}.brand span{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
     .status-chip{display:flex;gap:8px;align-items:center;background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.35);padding:9px 12px;border-radius:999px;color:var(--green);font-weight:700;font-size:.82rem;white-space:nowrap}
-    .filters{background:rgba(17,28,46,.92);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:12px;align-items:end}
+    .filters{background:rgba(17,28,46,.92);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:12px;align-items:end}
     .field label{display:block;color:var(--muted);font-size:.76rem;text-transform:uppercase;margin-bottom:6px}.field select,.field input{width:100%;background:#07111f;border:1px solid var(--border);color:white;border-radius:10px;padding:10px 12px;outline:none}.field select:focus,.field input:focus{border-color:var(--cyan)}
-    .sync{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px}.sync.ok{color:var(--green)}.sync.err{color:var(--red)}
+    .sync{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-height:38px}.sync.ok{color:var(--green)}.sync.err{color:var(--red)}.refresh-btn{width:100%;background:linear-gradient(135deg,#00d2ff,#2563eb);border:0;color:white;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(0,210,255,.18)}.refresh-btn:hover{filter:brightness(1.08)}.refresh-btn:active{transform:translateY(1px)}
     .kpis{display:grid;grid-template-columns:repeat(6,minmax(160px,1fr));gap:14px;margin-bottom:18px}.kpi{background:#f8fafc;color:#102033;border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,.1);box-shadow:0 9px 20px rgba(0,0,0,.13)}
     .kpi .top{display:flex;justify-content:space-between;align-items:center;color:#64748b;font-size:.74rem;text-transform:uppercase;font-weight:700;gap:8px}.kpi .value{font-size:1.65rem;font-weight:800;margin-top:9px;line-height:1}.kpi .unit{font-size:.85rem;color:#64748b;font-weight:600}.kpi .note{margin-top:7px;font-size:.75rem;color:#64748b}.kpi.green{border-left:5px solid var(--green)}.kpi.blue{border-left:5px solid var(--cyan)}.kpi.red{border-left:5px solid var(--red)}.kpi.yellow{border-left:5px solid var(--yellow)}.kpi.purple{border-left:5px solid var(--purple)}
     .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
@@ -79,6 +79,7 @@
       <div class="field"><label>Año</label><select id="anio" onchange="refrescarMesFecha(); renderDashboard();"></select></div>
       <div class="field"><label>Mes</label><select id="mes" onchange="refrescarFechas(); renderDashboard();"></select></div>
       <div class="field"><label>Fecha</label><select id="fecha" onchange="renderDashboard()"></select></div>
+      <div class="field"><label>Recarga rápida</label><button class="refresh-btn" onclick="cargarSheets(true)"><i class="fas fa-rotate-right"></i> Actualizar ahora</button></div>
       <div class="sync" id="syncStatus"><i class="fas fa-spinner fa-spin"></i> Conectando a Sheets...</div>
     </section>
 
@@ -126,7 +127,7 @@
         </div>
       </div>
     </section>
-    <div class="footer-note">Datos leídos desde Google Sheets publicado como CSV. Inicio de datos: fila 7.</div>
+    <div class="footer-note">Datos leídos desde Google Sheets publicado como CSV. Inicio de datos: fila 7. Modo rápido: sin caché + recarga automática cada 15 segundos.</div>
   </main>
 
 <script>
@@ -138,8 +139,11 @@ const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTid2z1F-w3Sh
 // M: Totalizador UFI | N: Totalizador UFN
 const COL = { fecha:0, turbidez:1, tkNuevo:3, tkAntiguo:4, recNuevo:5, recAntiguo:6, roa:7, rob:8, roc:9, rod:10, roe:11, ufi:12, ufn:13 };
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const AUTO_REFRESH_MS = 15000; // 15 segundos: máximo práctico para no saturar Google Sheets
 let registros = [];
 let charts = {};
+let ultimoCSV = '';
+let autoTimer = null;
 
 function toggleMenu(){ document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 function setSync(txt, cls=''){ const el=document.getElementById('syncStatus'); el.className='sync '+cls; el.innerHTML=txt; }
@@ -183,15 +187,29 @@ function parseFecha(s){
 function isoDate(d){ return d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` : ''; }
 function displayDate(d){ return d ? d.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '--'; }
 
-async function cargarSheets(){
+function getEstadoFiltros(){
+  return {
+    vista: document.getElementById('vista')?.value,
+    anio: document.getElementById('anio')?.value,
+    mes: document.getElementById('mes')?.value,
+    fecha: document.getElementById('fecha')?.value
+  };
+}
+function buildFastUrl(){
+  const sep = SHEET_URL.includes('?') ? '&' : '?';
+  return SHEET_URL + sep + '_cb=' + Date.now() + '_' + Math.floor(Math.random()*1000000);
+}
+
+async function cargarSheets(manual=false){
+  const keep = getEstadoFiltros();
   try{
-    setSync('<i class="fas fa-spinner fa-spin"></i> Conectando a Sheets...');
-    const r = await fetch(SHEET_URL + '&t=' + Date.now(), {cache:'no-store'});
+    setSync('<i class="fas fa-spinner fa-spin"></i> Leyendo Sheets sin caché...');
+    const r = await fetch(buildFastUrl(), { cache:'no-store', mode:'cors', redirect:'follow' });
     if(!r.ok) throw new Error('HTTP '+r.status);
     const txt = await r.text();
     const rows = parseCSV(txt);
     // Datos desde fila 7 => índice 6
-    registros = rows.slice(6).map(f => {
+    const nuevos = rows.slice(6).map(f => {
       const fecha = parseFecha(f[COL.fecha]);
       return {
         fecha, iso: isoDate(fecha), anio: fecha?.getFullYear(), mes: fecha?.getMonth(), dia: fecha?.getDate(),
@@ -203,35 +221,45 @@ async function cargarSheets(){
       };
     }).filter(x => x.fecha).sort((a,b)=>a.fecha-b.fecha);
 
-    if(!registros.length) throw new Error('No se encontraron fechas desde A7');
-    setSync(`<i class="fas fa-check-circle"></i> Sheets conectado: ${registros.length} registros`, 'ok');
-    llenarFiltros(); initCharts(); renderDashboard();
+    if(!nuevos.length) throw new Error('No se encontraron fechas desde A7');
+    registros = nuevos;
+    const cambio = txt !== ultimoCSV;
+    ultimoCSV = txt;
+
+    llenarFiltros(keep);
+    if(!Object.keys(charts).length) initCharts();
+    renderDashboard();
+
+    const hora = new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    setSync(`<i class="fas fa-check-circle"></i> ${manual ? 'Actualizado manualmente' : 'Autoactualizado'}: ${registros.length} registros | ${hora}${cambio ? '' : ' | sin cambios'}`, 'ok');
   }catch(e){
-    console.error(e); setSync('<i class="fas fa-triangle-exclamation"></i> Sheets no conectado. Revisa publicación CSV.', 'err');
+    console.error(e);
+    setSync('<i class="fas fa-triangle-exclamation"></i> Sheets no conectado. Revisa publicación CSV.', 'err');
   }
 }
 
-function llenarFiltros(){
+function llenarFiltros(keep={}){
   const anios=[...new Set(registros.map(r=>r.anio))].sort((a,b)=>a-b);
   const anioSel=document.getElementById('anio');
   anioSel.innerHTML=anios.map(a=>`<option value="${a}">${a}</option>`).join('');
-  anioSel.value=anios[anios.length-1];
-  refrescarMesFecha();
+  anioSel.value = anios.includes(+keep.anio) ? keep.anio : anios[anios.length-1];
+  if(keep.vista) document.getElementById('vista').value = keep.vista;
+  refrescarMesFecha(keep);
 }
-function refrescarMesFecha(){
+function refrescarMesFecha(keep={}){
   const anio=+document.getElementById('anio').value;
   const meses=[...new Set(registros.filter(r=>r.anio===anio).map(r=>r.mes))].sort((a,b)=>a-b);
   const mesSel=document.getElementById('mes');
   mesSel.innerHTML=meses.map(m=>`<option value="${m}">${MESES[m]}</option>`).join('');
-  mesSel.value=meses[meses.length-1];
-  refrescarFechas();
+  mesSel.value = meses.includes(+keep.mes) ? keep.mes : meses[meses.length-1];
+  refrescarFechas(keep);
 }
-function refrescarFechas(){
+function refrescarFechas(keep={}){
   const anio=+document.getElementById('anio').value, mes=+document.getElementById('mes').value;
   const fechas=registros.filter(r=>r.anio===anio && r.mes===mes);
   const fechaSel=document.getElementById('fecha');
   fechaSel.innerHTML=fechas.map(r=>`<option value="${r.iso}">${displayDate(r.fecha)}</option>`).join('');
-  if(fechas.length) fechaSel.value=fechas[fechas.length-1].iso;
+  fechaSel.value = fechas.some(r=>r.iso===keep.fecha) ? keep.fecha : (fechas.length ? fechas[fechas.length-1].iso : '');
 }
 
 function initCharts(){
@@ -304,7 +332,10 @@ function renderDashboard(){
   charts.mensual.update();
 }
 
-window.addEventListener('load', cargarSheets);
+window.addEventListener('load', () => {
+  cargarSheets(false);
+  autoTimer = setInterval(() => cargarSheets(false), AUTO_REFRESH_MS);
+});
 </script>
 </body>
 </html>
