@@ -69,7 +69,7 @@
     .sync{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-height:38px}.sync.ok{color:var(--green)}.sync.err{color:var(--red)}.refresh-btn{width:100%;background:linear-gradient(135deg,#00d2ff,#2563eb);border:0;color:white;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(0,210,255,.18)}.refresh-btn:hover{filter:brightness(1.08)}.refresh-btn:active{transform:translateY(1px)}
     .kpis{display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:10px;margin-bottom:12px}.kpi{background:#f8fafc;color:#102033;border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.1);box-shadow:0 9px 20px rgba(0,0,0,.13)}
     .kpi .top{display:flex;justify-content:space-between;align-items:center;color:#64748b;font-size:.74rem;text-transform:uppercase;font-weight:700;gap:8px}.kpi .value{font-size:1.4rem;font-weight:800;margin-top:7px;line-height:1}.kpi .unit{font-size:.85rem;color:#64748b;font-weight:600}.kpi .note{margin-top:7px;font-size:.75rem;color:#64748b}.kpi.green{border-left:5px solid var(--green)}.kpi.blue{border-left:5px solid var(--cyan)}.kpi.red{border-left:5px solid var(--red)}.kpi.yellow{border-left:5px solid var(--yellow)}.kpi.purple{border-left:5px solid var(--purple)}
-    .grid{display:grid;grid-template-columns:290px 1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
     .panel-title{background:#102033;color:white;padding:13px 16px;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-body{padding:12px}
     .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1rem}.summary-duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.mini-box{background:#eef6ff;border:1px solid #d7e8ff;border-radius:12px;padding:10px}.mini-box .lbl{font-size:.72rem;color:#64748b;text-transform:uppercase}.mini-box .val{font-size:1.1rem;font-weight:800;margin-top:4px}
     .scada-card{margin-bottom:12px}.ros{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro{background:#ffffff;border-radius:14px;padding:10px;border:1px solid #e2e8f0;position:relative;overflow:hidden}.ro:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--green)}.ro.low:before{background:var(--red)}.ro h3{font-size:.92rem;margin-bottom:8px}.ro .pct{font-size:1.35rem;font-weight:900;color:#102033}.ro .meta{font-size:.75rem;color:#64748b;margin-top:5px}.ro .pipe{margin-top:12px;height:8px;border-radius:99px;background:linear-gradient(90deg,#dbeafe,#22c55e)}.ro.low .pipe{background:linear-gradient(90deg,#fee2e2,#ef4444)}
@@ -88,7 +88,17 @@
     .panel{box-shadow:0 16px 34px rgba(0,0,0,.18);border-color:rgba(226,232,240,.9)}
     .panel-title{background:linear-gradient(90deg,#082a52,#0b4e86);letter-spacing:.2px;text-transform:none}
     .summary-row strong,.mini-box .val{color:#062346}.mini-box{background:linear-gradient(180deg,#f7fbff,#eef6ff)}
-    .ro{box-shadow:0 8px 18px rgba(15,35,62,.08)}.ro .pct{color:#07294d}.ro h3{color:#0a3764}.ro .pipe{box-shadow:0 0 14px rgba(34,197,94,.18)}
+    .ro{box-shadow:0 8px 18px rgba(15,35,62,.08)}.ro .pct{color:#07294d}.ro h3{color:#0a3764;display:flex;align-items:center;gap:6px}.ro h3 i{color:#0f6db5}.ro .pipe{box-shadow:0 0 14px rgba(34,197,94,.18)}
+    .executive-strip{display:grid;grid-template-columns:360px 1fr;gap:12px;margin-bottom:12px}
+    .motor-hero{background:linear-gradient(135deg,#082a52,#0b4e86);border:1px solid rgba(0,210,255,.26);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 16px 34px rgba(0,0,0,.18)}
+    .motor-hero h3{font-size:1rem;color:#fff;margin-bottom:4px}.motor-hero p{font-size:.78rem;color:#bad7f3}
+    .motor-visual{width:62px;height:62px;border-radius:18px;background:linear-gradient(180deg,#0f3458,#082033);border:1px solid rgba(0,210,255,.28);display:grid;place-items:center;color:#72efff;font-size:1.8rem;box-shadow:inset 0 0 18px rgba(0,0,0,.22),0 0 22px rgba(0,210,255,.14)}
+    .motor-visual i{animation:motorSpin 3.8s linear infinite}
+    @keyframes motorSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .dynamic-data{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .dynamic-data div{background:#f8fafc;border:1px solid rgba(226,232,240,.9);border-radius:18px;padding:14px 16px;box-shadow:0 14px 28px rgba(0,0,0,.15)}
+    .dynamic-data span{display:block;color:#64748b;text-transform:uppercase;font-size:.72rem;font-weight:800;margin-bottom:6px}
+    .dynamic-data strong{display:block;color:#082a52;font-size:1.15rem;font-weight:900}
     .scada-process{border-color:rgba(0,210,255,.25);box-shadow:0 20px 50px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05)}
     .scada-titlebar h2{font-size:1.08rem}.scada-titlebar span{color:#b7d6f2}
     .equip{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
@@ -96,8 +106,8 @@
     .ro-metric{background:rgba(255,255,255,.075)}.ro-metric strong{font-size:.78rem}.scada-mini{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
     .module-box{box-shadow:0 14px 30px rgba(0,0,0,.12)}
 
-    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr 1fr}.filters{grid-template-columns:repeat(3,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#00d2ff,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.kpis{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
+    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr 1fr}.filters{grid-template-columns:repeat(3,1fr)}.executive-strip{grid-template-columns:1fr}.dynamic-data{grid-template-columns:repeat(2,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#00d2ff,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.kpis{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.dynamic-data{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -158,27 +168,26 @@
 
     <section class="grid">
       <div>
-        <div class="panel">
-          <div class="panel-title"><span><i class="fas fa-list-check"></i> Resumen operativo</span><span id="resumenPeriodo">--</span></div>
-          <div class="panel-body">
-            <div class="summary-row"><span>Fecha / periodo</span><strong id="sumFecha">--</strong></div>
-            <div class="summary-row"><span>Prom. turbidez</span><strong id="sumTurbidez">--</strong></div>
-            <div class="summary-row"><span>Prom. recuperación RO</span><strong id="sumRecRO">--</strong></div>
-            <div class="summary-row"><span>Totalizador UFI</span><strong id="sumUfi">--</strong></div>
-            <div class="summary-row"><span>Totalizador UFN</span><strong id="sumUfn">--</strong></div>
-            <div class="summary-duo">
-              <div class="mini-box"><div class="lbl">TK Nuevo</div><div class="val" id="boxTkNuevo">--</div></div>
-              <div class="mini-box"><div class="lbl">TK Antiguo</div><div class="val" id="boxTkAntiguo">--</div></div>
-              <div class="mini-box"><div class="lbl">Rec. Nuevo</div><div class="val" id="boxRecNuevo">--</div></div>
-              <div class="mini-box"><div class="lbl">Rec. Antiguo</div><div class="val" id="boxRecAntiguo">--</div></div>
+        <div class="executive-strip">
+          <div class="motor-hero">
+            <div class="motor-visual">
+              <i class="fas fa-gear"></i>
+            </div>
+            <div>
+              <h3>Motor / Bomba principal RO</h3>
+              <p>Vista dinámica de operación para módulos de ósmosis inversa</p>
             </div>
           </div>
+          <div class="dynamic-data">
+            <div><span>Periodo</span><strong id="resumenPeriodo">--</strong></div>
+            <div><span>Prom. turbidez</span><strong id="sumTurbidez">--</strong></div>
+            <div><span>Prom. recuperación RO</span><strong id="sumRecRO">--</strong></div>
+            <div><span>UFI / UFN</span><strong id="sumUfiUfn">--</strong></div>
+          </div>
         </div>
-      </div>
 
-      <div>
         <div class="panel scada-card">
-          <div class="panel-title"><span><i class="fas fa-industry"></i> SCADA | Recuperación de 5 ósmosis inversa</span><span>RO A - RO E</span></div>
+          <div class="panel-title"><span><i class="fas fa-industry"></i> Estado rápido de módulos RO</span><span>RO A - RO E</span></div>
           <div class="panel-body"><div class="ros" id="roCards"></div></div>
         </div>
 
@@ -623,15 +632,13 @@ function renderDashboard(){
   document.getElementById('kpiTurbidez').innerHTML = `${format(vals.turbidez,2)} <span class="unit">NTU</span>`;
   document.getElementById('kpiUfiUfn').innerHTML = `${format(vals.ufi,0)} / ${format(vals.ufn,0)}`;
 
-  document.getElementById('resumenPeriodo').innerText=labelPeriodo; document.getElementById('sumFecha').innerText=labelPeriodo;
+  document.getElementById('resumenPeriodo').innerText=labelPeriodo;
   document.getElementById('sumTurbidez').innerText=`${format(vals.turbidez,2)} NTU`;
   document.getElementById('sumRecRO').innerText=`${format(avg([vals.roa,vals.rob,vals.roc,vals.rod,vals.roe]),1)} %`;
-  document.getElementById('sumUfi').innerText=`${format(vals.ufi,0)} m³`; document.getElementById('sumUfn').innerText=`${format(vals.ufn,0)} m³`;
-  document.getElementById('boxTkNuevo').innerText=format(vals.tkNuevo,1); document.getElementById('boxTkAntiguo').innerText=format(vals.tkAntiguo,1);
-  document.getElementById('boxRecNuevo').innerText=format(vals.recNuevo,1)+'%'; document.getElementById('boxRecAntiguo').innerText=format(vals.recAntiguo,1)+'%';
+  document.getElementById('sumUfiUfn').innerText=`${format(vals.ufi,0)} / ${format(vals.ufn,0)}`;
 
   const roVals=[vals.roa,vals.rob,vals.roc,vals.rod,vals.roe], roNames=['RO A','RO B','RO C','RO D','RO E'];
-  document.getElementById('roCards').innerHTML=roVals.map((v,i)=>`<div class="ro ${v!=null && v<20?'low':''}"><h3>${roNames[i]}</h3><div class="pct">${format(v,1)}%</div><div class="meta">${v!=null && v<20?'Baja recuperación':'Operación estable'}</div><div class="pipe"></div></div>`).join('');
+  document.getElementById('roCards').innerHTML=roVals.map((v,i)=>`<div class="ro ${v!=null && v<20?'low':''}"><h3><i class="fas fa-gear"></i> ${roNames[i]}</h3><div class="pct">${format(v,1)}%</div><div class="meta">${v!=null && v<20?'Baja recuperación':'Operación estable'}</div><div class="pipe"></div></div>`).join('');
   renderModules(vals, labelPeriodo);
 
   const dias = mesData.map(r=>String(r.dia).padStart(2,'0'));
