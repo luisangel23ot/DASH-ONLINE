@@ -60,21 +60,21 @@
     .ro-metrics{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px}.ro-metric{display:flex;justify-content:space-between;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px;font-size:.74rem}.ro-metric span{color:var(--muted)}.ro-metric strong{color:#fff}
     .scada-bottom{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.scada-mini{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px}.scada-mini span{display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase}.scada-mini strong{display:block;font-size:1.2rem;margin-top:5px;color:#fff}
     .scada-detail-panel{margin-top:16px}
-    .main{width:100%;padding:18px 22px 28px}
-    .topbar{background:rgba(17,28,46,.96);border:1px solid var(--border);border-radius:16px;padding:15px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:var(--shadow);position:sticky;top:10px;z-index:10;backdrop-filter:blur(10px)}
+    .main{width:100%;padding:12px 16px 16px}
+    .topbar{background:rgba(17,28,46,.96);border:1px solid var(--border);border-radius:16px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:var(--shadow);position:sticky;top:10px;z-index:10;backdrop-filter:blur(10px)}
     .brand{display:flex;align-items:center;gap:14px}.menu-btn{border:0;background:#0b1220;color:var(--cyan);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:1.15rem}.brand h1{font-size:1.12rem;letter-spacing:.4px}.brand span{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
     .status-chip{display:flex;gap:8px;align-items:center;background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.35);padding:9px 12px;border-radius:999px;color:var(--green);font-weight:700;font-size:.82rem;white-space:nowrap}
-    .filters{background:rgba(17,28,46,.92);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:12px;align-items:end}
+    .filters{background:rgba(17,28,46,.92);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px;display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;align-items:end}
     .field label{display:block;color:var(--muted);font-size:.76rem;text-transform:uppercase;margin-bottom:6px}.field select,.field input{width:100%;background:#07111f;border:1px solid var(--border);color:white;border-radius:10px;padding:10px 12px;outline:none}.field select:focus,.field input:focus{border-color:var(--cyan)}
     .sync{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-height:38px}.sync.ok{color:var(--green)}.sync.err{color:var(--red)}.refresh-btn{width:100%;background:linear-gradient(135deg,#00d2ff,#2563eb);border:0;color:white;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(0,210,255,.18)}.refresh-btn:hover{filter:brightness(1.08)}.refresh-btn:active{transform:translateY(1px)}
-    .kpis{display:grid;grid-template-columns:repeat(6,minmax(160px,1fr));gap:14px;margin-bottom:18px}.kpi{background:#f8fafc;color:#102033;border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,.1);box-shadow:0 9px 20px rgba(0,0,0,.13)}
-    .kpi .top{display:flex;justify-content:space-between;align-items:center;color:#64748b;font-size:.74rem;text-transform:uppercase;font-weight:700;gap:8px}.kpi .value{font-size:1.65rem;font-weight:800;margin-top:9px;line-height:1}.kpi .unit{font-size:.85rem;color:#64748b;font-weight:600}.kpi .note{margin-top:7px;font-size:.75rem;color:#64748b}.kpi.green{border-left:5px solid var(--green)}.kpi.blue{border-left:5px solid var(--cyan)}.kpi.red{border-left:5px solid var(--red)}.kpi.yellow{border-left:5px solid var(--yellow)}.kpi.purple{border-left:5px solid var(--purple)}
-    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
-    .panel-title{background:#102033;color:white;padding:13px 16px;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-body{padding:16px}
-    .summary-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1rem}.summary-duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mini-box{background:#eef6ff;border:1px solid #d7e8ff;border-radius:12px;padding:12px}.mini-box .lbl{font-size:.72rem;color:#64748b;text-transform:uppercase}.mini-box .val{font-size:1.35rem;font-weight:800;margin-top:4px}
-    .scada-card{margin-bottom:18px}.ros{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro{background:#ffffff;border-radius:14px;padding:13px;border:1px solid #e2e8f0;position:relative;overflow:hidden}.ro:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--green)}.ro.low:before{background:var(--red)}.ro h3{font-size:.92rem;margin-bottom:8px}.ro .pct{font-size:1.7rem;font-weight:900;color:#102033}.ro .meta{font-size:.75rem;color:#64748b;margin-top:5px}.ro .pipe{margin-top:12px;height:8px;border-radius:99px;background:linear-gradient(90deg,#dbeafe,#22c55e)}.ro.low .pipe{background:linear-gradient(90deg,#fee2e2,#ef4444)}
-    .charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chart{height:330px}.chart.wide{grid-column:1/-1;height:350px}.canvas-wrap{position:relative;height:260px;width:100%}.chart.wide .canvas-wrap{height:280px}
-    .footer-note{margin-top:14px;color:var(--muted);font-size:.8rem;text-align:right}
+    .kpis{display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:10px;margin-bottom:12px}.kpi{background:#f8fafc;color:#102033;border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.1);box-shadow:0 9px 20px rgba(0,0,0,.13)}
+    .kpi .top{display:flex;justify-content:space-between;align-items:center;color:#64748b;font-size:.74rem;text-transform:uppercase;font-weight:700;gap:8px}.kpi .value{font-size:1.4rem;font-weight:800;margin-top:7px;line-height:1}.kpi .unit{font-size:.85rem;color:#64748b;font-weight:600}.kpi .note{margin-top:7px;font-size:.75rem;color:#64748b}.kpi.green{border-left:5px solid var(--green)}.kpi.blue{border-left:5px solid var(--cyan)}.kpi.red{border-left:5px solid var(--red)}.kpi.yellow{border-left:5px solid var(--yellow)}.kpi.purple{border-left:5px solid var(--purple)}
+    .grid{display:grid;grid-template-columns:290px 1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
+    .panel-title{background:#102033;color:white;padding:13px 16px;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-body{padding:12px}
+    .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1rem}.summary-duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.mini-box{background:#eef6ff;border:1px solid #d7e8ff;border-radius:12px;padding:10px}.mini-box .lbl{font-size:.72rem;color:#64748b;text-transform:uppercase}.mini-box .val{font-size:1.1rem;font-weight:800;margin-top:4px}
+    .scada-card{margin-bottom:12px}.ros{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro{background:#ffffff;border-radius:14px;padding:10px;border:1px solid #e2e8f0;position:relative;overflow:hidden}.ro:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--green)}.ro.low:before{background:var(--red)}.ro h3{font-size:.92rem;margin-bottom:8px}.ro .pct{font-size:1.35rem;font-weight:900;color:#102033}.ro .meta{font-size:.75rem;color:#64748b;margin-top:5px}.ro .pipe{margin-top:12px;height:8px;border-radius:99px;background:linear-gradient(90deg,#dbeafe,#22c55e)}.ro.low .pipe{background:linear-gradient(90deg,#fee2e2,#ef4444)}
+    .charts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.chart{height:270px}.canvas-wrap{position:relative;height:210px;width:100%}
+    .footer-note{margin-top:10px;color:var(--muted);font-size:.76rem;text-align:right}
 
     /* --- MEJORAS VISUALES GERENCIALES --- */
     .main{background:radial-gradient(circle at top right,rgba(0,210,255,.08),transparent 34%),radial-gradient(circle at bottom left,rgba(179,136,255,.06),transparent 32%)}
@@ -96,8 +96,8 @@
     .ro-metric{background:rgba(255,255,255,.075)}.ro-metric strong{font-size:.78rem}.scada-mini{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
     .module-box{box-shadow:0 14px 30px rgba(0,0,0,.12)}
 
-    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.filters{grid-template-columns:repeat(3,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#00d2ff,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.kpis{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
+    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr 1fr}.filters{grid-template-columns:repeat(3,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#00d2ff,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.kpis{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -123,6 +123,7 @@
       <div class="side-item"><small>O-S</small><strong>Conductividad RO</strong></div>
       <div class="side-item"><small>T-X</small><strong>Horas operación</strong></div>
       <div class="side-item"><small>Y-AM</small><strong>ΔP / Flujos</strong></div>
+      <div class="side-item"><small>AN-AR</small><strong>Volúmenes RO</strong></div>
     </div>
     <div class="side-section"><div class="side-title">Alertas</div>
       <div class="side-item warn"><small>Límite turbidez</small><strong>5 NTU</strong></div>
@@ -184,9 +185,7 @@
         <div class="charts">
           <div class="panel chart"><div class="panel-title">Conductividad por módulos (RO A - RO E)</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartCondMod"></canvas></div></div></div>
           <div class="panel chart"><div class="panel-title">Turbidez diaria del mes (NTU)</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartTurbidezMes"></canvas></div></div></div>
-          <div class="panel chart"><div class="panel-title">Rec. Nuevo vs Rec. Antiguo</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartRecPlanta"></canvas></div></div></div>
-          <div class="panel chart"><div class="panel-title">Recuperación RO A - E</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartRO"></canvas></div></div></div>
-          <div class="panel chart wide"><div class="panel-title">Totalizadores UFI / UFN por mes</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartMensual"></canvas></div></div></div>
+          <div class="panel chart"><div class="panel-title">Volúmenes por módulos (RO A - RO E)</div><div class="panel-body"><div class="canvas-wrap"><canvas id="chartVolumenes"></canvas></div></div></div>
         </div>
       </div>
     </section>
@@ -280,7 +279,8 @@ const COL = {
   difB:27, permeadoB:28, concentradoB:29,
   difC:30, permeadoC:31, concentradoC:32,
   difD:33, permeadoD:34, concentradoD:35,
-  difE:36, permeadoE:37, concentradoE:38
+  difE:36, permeadoE:37, concentradoE:38,
+  volA:39, volB:40, volC:41, volD:42, volE:43
 };
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const AUTO_REFRESH_MS = 15000; // 15 segundos: máximo práctico para no saturar Google Sheets
@@ -382,7 +382,8 @@ async function cargarSheets(manual=false){
         difB: toNum(f[COL.difB]), permeadoB: toNum(f[COL.permeadoB]), concentradoB: toNum(f[COL.concentradoB]),
         difC: toNum(f[COL.difC]), permeadoC: toNum(f[COL.permeadoC]), concentradoC: toNum(f[COL.concentradoC]),
         difD: toNum(f[COL.difD]), permeadoD: toNum(f[COL.permeadoD]), concentradoD: toNum(f[COL.concentradoD]),
-        difE: toNum(f[COL.difE]), permeadoE: toNum(f[COL.permeadoE]), concentradoE: toNum(f[COL.concentradoE])
+        difE: toNum(f[COL.difE]), permeadoE: toNum(f[COL.permeadoE]), concentradoE: toNum(f[COL.concentradoE]),
+        volA: toNum(f[COL.volA]), volB: toNum(f[COL.volB]), volC: toNum(f[COL.volC]), volD: toNum(f[COL.volD]), volE: toNum(f[COL.volE])
       };
     }).filter(x => x.fecha).sort((a,b)=>a.fecha-b.fecha);
 
@@ -433,13 +434,19 @@ function initCharts(){
   if(Object.keys(charts).length) Object.values(charts).forEach(c=>c.destroy());
   charts.condMod = new Chart(document.getElementById('chartCondMod'), {
     type:'bar',
-    data:{labels:['RO A','RO B','RO C','RO D','RO E'],datasets:[{label:'Conductividad µS/cm',data:[],backgroundColor:['#00d2ff','#38bdf8','#60a5fa','#818cf8','#a78bfa']}]},
+    data:{labels:['RO A','RO B','RO C','RO D','RO E'],datasets:[{label:'Conductividad µS/cm',data:[],backgroundColor:['#00d2ff','#38bdf8','#60a5fa','#818cf8','#a78bfa'],borderRadius:8}]},
     options:{...common,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
   });
-  charts.turbidezMes = new Chart(document.getElementById('chartTurbidezMes'), {type:'line', data:{labels:[],datasets:[{label:'Turbidez diaria NTU',data:[],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.13)',fill:true,tension:.32,pointRadius:4,pointHoverRadius:6},{label:'Límite operativo 5 NTU',data:[],borderColor:'#ff1744',borderDash:[7,5],pointRadius:0}]}, options:common});
-  charts.recPlanta = new Chart(document.getElementById('chartRecPlanta'), {type:'line', data:{labels:[],datasets:[{label:'Rec Nuevo %',data:[],borderColor:'#00e676',backgroundColor:'rgba(0,230,118,.10)',fill:true,tension:.28},{label:'Rec Antiguo %',data:[],borderColor:'#ffcc00',backgroundColor:'rgba(255,204,0,.10)',fill:true,tension:.28}]}, options:common});
-  charts.ro = new Chart(document.getElementById('chartRO'), {type:'bar', data:{labels:['RO A','RO B','RO C','RO D','RO E'],datasets:[{label:'% Recuperación',data:[],backgroundColor:[]}]}, options:{...common,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100}}}});
-  charts.mensual = new Chart(document.getElementById('chartMensual'), {type:'bar', data:{labels:[],datasets:[{label:'UFI',data:[],backgroundColor:'#00d2ff'},{label:'UFN',data:[],backgroundColor:'#00e676'}]}, options:common});
+  charts.turbidezMes = new Chart(document.getElementById('chartTurbidezMes'), {
+    type:'line',
+    data:{labels:[],datasets:[{label:'Turbidez diaria NTU',data:[],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.13)',fill:true,tension:.32,pointRadius:3,pointHoverRadius:5},{label:'Límite operativo 5 NTU',data:[],borderColor:'#ff1744',borderDash:[7,5],pointRadius:0}]},
+    options:{...common,plugins:{legend:{labels:{boxWidth:12}}},scales:{y:{beginAtZero:true}}}
+  });
+  charts.volumenes = new Chart(document.getElementById('chartVolumenes'), {
+    type:'bar',
+    data:{labels:['RO A','RO B','RO C','RO D','RO E'],datasets:[{label:'Volumen',data:[],backgroundColor:['#0ea5e9','#22c55e','#f59e0b','#a855f7','#ef4444'],borderRadius:8}]},
+    options:{...common,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+  });
 }
 
 function getPeriodo(){
@@ -601,7 +608,12 @@ function renderDashboard(){
     concentradoB: vista==='dia' ? diaData.concentradoB : avg(periodo.map(r=>r.concentradoB)),
     concentradoC: vista==='dia' ? diaData.concentradoC : avg(periodo.map(r=>r.concentradoC)),
     concentradoD: vista==='dia' ? diaData.concentradoD : avg(periodo.map(r=>r.concentradoD)),
-    concentradoE: vista==='dia' ? diaData.concentradoE : avg(periodo.map(r=>r.concentradoE))
+    concentradoE: vista==='dia' ? diaData.concentradoE : avg(periodo.map(r=>r.concentradoE)),
+    volA: vista==='dia' ? diaData.volA : avg(periodo.map(r=>r.volA)),
+    volB: vista==='dia' ? diaData.volB : avg(periodo.map(r=>r.volB)),
+    volC: vista==='dia' ? diaData.volC : avg(periodo.map(r=>r.volC)),
+    volD: vista==='dia' ? diaData.volD : avg(periodo.map(r=>r.volD)),
+    volE: vista==='dia' ? diaData.volE : avg(periodo.map(r=>r.volE))
   };
 
   document.getElementById('kpiTkNuevo').innerHTML = `${format(vals.tkNuevo,1)} <span class="unit">m³</span>`;
@@ -625,15 +637,12 @@ function renderDashboard(){
   const dias = mesData.map(r=>String(r.dia).padStart(2,'0'));
   charts.condMod.data.datasets[0].data = [vals.condA, vals.condB, vals.condC, vals.condD, vals.condE];
   charts.condMod.update();
-  charts.turbidezMes.data.labels=dias; charts.turbidezMes.data.datasets[0].data=mesData.map(r=>r.turbidez); charts.turbidezMes.data.datasets[1].data=mesData.map(()=>5); charts.turbidezMes.update();
-  charts.recPlanta.data.labels=dias; charts.recPlanta.data.datasets[0].data=mesData.map(r=>r.recNuevo); charts.recPlanta.data.datasets[1].data=mesData.map(r=>r.recAntiguo); charts.recPlanta.update();
-  charts.ro.data.datasets[0].data=roVals; charts.ro.data.datasets[0].backgroundColor=roVals.map(v=>v!=null && v<20 ? '#ff1744' : '#00d2ff'); charts.ro.update();
-
-  const meses = [...new Set(registros.filter(r=>r.anio===anio && r.mes<=mes).map(r=>r.mes))].sort((a,b)=>a-b);
-  charts.mensual.data.labels=meses.map(m=>MESES[m]);
-  charts.mensual.data.datasets[0].data=meses.map(m=>lastVal(registros.filter(r=>r.anio===anio && r.mes===m).map(r=>r.ufi)));
-  charts.mensual.data.datasets[1].data=meses.map(m=>lastVal(registros.filter(r=>r.anio===anio && r.mes===m).map(r=>r.ufn)));
-  charts.mensual.update();
+  charts.turbidezMes.data.labels = dias;
+  charts.turbidezMes.data.datasets[0].data = mesData.map(r=>r.turbidez);
+  charts.turbidezMes.data.datasets[1].data = mesData.map(()=>5);
+  charts.turbidezMes.update();
+  charts.volumenes.data.datasets[0].data = [vals.volA, vals.volB, vals.volC, vals.volD, vals.volE];
+  charts.volumenes.update();
 }
 
 window.addEventListener('load', () => {
