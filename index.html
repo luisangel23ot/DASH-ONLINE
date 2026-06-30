@@ -352,7 +352,10 @@ const COL = {
   difC:30, permeadoC:31, concentradoC:32,
   difD:33, permeadoD:34, concentradoD:35,
   difE:36, permeadoE:37, concentradoE:38,
-  volA:39, volB:40, volC:41, volD:42, volE:43
+  volA:39, volB:40, volC:41, volD:42, volE:43,
+  turbUfi1:45, turbUfi2:46, turbUfi3:47,
+  dpUfi1:48, dpUfi2:49, dpUfi3:50,
+  prodUfi1:51, prodUfi2:52, prodUfi3:53, prodUfn:54
 };
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const AUTO_REFRESH_MS = 15000; // 15 segundos: máximo práctico para no saturar Google Sheets
@@ -457,7 +460,10 @@ async function cargarSheets(manual=false){
         difC: toNum(f[COL.difC]), permeadoC: toNum(f[COL.permeadoC]), concentradoC: toNum(f[COL.concentradoC]),
         difD: toNum(f[COL.difD]), permeadoD: toNum(f[COL.permeadoD]), concentradoD: toNum(f[COL.concentradoD]),
         difE: toNum(f[COL.difE]), permeadoE: toNum(f[COL.permeadoE]), concentradoE: toNum(f[COL.concentradoE]),
-        volA: toNum(f[COL.volA]), volB: toNum(f[COL.volB]), volC: toNum(f[COL.volC]), volD: toNum(f[COL.volD]), volE: toNum(f[COL.volE])
+        volA: toNum(f[COL.volA]), volB: toNum(f[COL.volB]), volC: toNum(f[COL.volC]), volD: toNum(f[COL.volD]), volE: toNum(f[COL.volE]),
+        turbUfi1: toNum(f[COL.turbUfi1]), turbUfi2: toNum(f[COL.turbUfi2]), turbUfi3: toNum(f[COL.turbUfi3]),
+        dpUfi1: toNum(f[COL.dpUfi1]), dpUfi2: toNum(f[COL.dpUfi2]), dpUfi3: toNum(f[COL.dpUfi3]),
+        prodUfi1: toNum(f[COL.prodUfi1]), prodUfi2: toNum(f[COL.prodUfi2]), prodUfi3: toNum(f[COL.prodUfi3]), prodUfn: toNum(f[COL.prodUfn])
       };
     }).filter(x => x.fecha).sort((a,b)=>a.fecha-b.fecha);
 
@@ -587,26 +593,30 @@ function buildModuleAssets(vals, labelPeriodo){
       ]
     };
   });
-  const ufiShare = vals.ufi != null ? vals.ufi/3 : null;
-  ['UFI 1','UFI 2','UFI 3'].forEach((name, idx) => {
-    assets['ufi'+(idx+1)] = {
-      id:'ufi'+(idx+1), category:'Ultrafiltración', short:name, title:`${name} | Sistema de ultrafiltración`, icon:'fa-filter', processLabel:'Agua cruda > UFI > RO', status:'En servicio', warn:false,
+  [
+    {name:'UFI 1', id:'ufi1', turb:vals.turbUfi1, dp:vals.dpUfi1, prod:vals.prodUfi1},
+    {name:'UFI 2', id:'ufi2', turb:vals.turbUfi2, dp:vals.dpUfi2, prod:vals.prodUfi2},
+    {name:'UFI 3', id:'ufi3', turb:vals.turbUfi3, dp:vals.dpUfi3, prod:vals.prodUfi3}
+  ].forEach((u, idx) => {
+    const warn = u.turb != null && u.turb > 5;
+    assets[u.id] = {
+      id:u.id, category:'Ultrafiltración', short:u.name, title:`${u.name} | Sistema de ultrafiltración`, icon:'fa-filter', processLabel:'Agua cruda > UFI > RO', status: warn ? 'Turbidez alta' : 'En servicio', warn:warn,
       subtitle:'Unidad de pretratamiento por ultrafiltración previa a los trenes RO.',
-      note:'Por ahora el sistema divide el totalizador UFI de forma referencial entre las 3 unidades. Si luego tienes variables específicas por UFI, se integran sin problema.',
+      note:'Esta ficha ya usa datos reales del Sheets para turbidez, diferencial de presión y producción de cada UFI.',
       process:[
         {label:'Agua cruda', small:'Entrada', icon:'fa-water'},
-        {label:name, small:'Filtración', icon:'fa-filter', active:true},
+        {label:u.name, small:'Filtración', icon:'fa-filter', active:true},
         {label:'Calidad', small:'Turbidez', icon:'fa-vial'},
         {label:'RO', small:'Alimentación', icon:'fa-diagram-project'},
         {label:'Salida', small:'Continuidad', icon:'fa-arrow-right'}
       ],
       metrics:[
-        {label:'Caudal referencial', value:format(ufiShare,0), note:'Totalizador UFI / 3'},
-        {label:'Turbidez promedio', value:format(vals.turbidez,2)+' NTU', note:'Periodo activo'},
+        {label:'Turbidez', value:format(u.turb,2)+' NTU', note:['AT','AU','AV'][idx]},
+        {label:'Dif. presión', value:format(u.dp,2), note:['AW','AX','AY'][idx]},
+        {label:'Producción', value:format(u.prod,2), note:['AZ','BA','BB'][idx]},
+        {label:'Estado filtro', value:warn ? 'Revisar' : 'Operativo', note:'Según turbidez'},
         {label:'Rec. nuevo', value:format(vals.recNuevo,1)+'%', note:'Referencia general'},
         {label:'Rec. antiguo', value:format(vals.recAntiguo,1)+'%', note:'Referencia general'},
-        {label:'Estado filtro', value:'Operativo', note:'Visual de proceso'},
-        {label:'Horas ref.', value:format(avg([vals.horasA,vals.horasB,vals.horasC]),1)+' h', note:'Promedio estimado'},
         {label:'Destino', value:'RO A - E', note:'Alimentación general'},
         {label:'Periodo visible', value:labelPeriodo, note:'Filtro actual'}
       ]
@@ -615,21 +625,21 @@ function buildModuleAssets(vals, labelPeriodo){
   assets['ufn1'] = {
     id:'ufn1', category:'Ultrafiltración', short:'UFN 1', title:'UFN 1 | Sistema de ultrafiltración final', icon:'fa-filter', processLabel:'UFI > UFN > RO', status:'En servicio', warn:false,
     subtitle:'Unidad UFN utilizada como etapa complementaria de filtración.',
-    note:'Si más adelante defines datos propios del UFN, este panel puede mostrar sus variables reales en lugar de referencias globales.',
+    note:'La ficha UFN ahora muestra la producción real desde la columna BC.',
     process:[
       {label:'UFI', small:'Alimentación', icon:'fa-filter'},
       {label:'UFN 1', small:'Pulimiento', icon:'fa-filter', active:true},
-      {label:'Calidad', small:'Turbidez', icon:'fa-vial'},
+      {label:'Calidad', small:'Producción', icon:'fa-vial'},
       {label:'RO', small:'Distribución', icon:'fa-diagram-project'},
       {label:'Salida', small:'Continuidad', icon:'fa-arrow-right'}
     ],
     metrics:[
-      {label:'Totalizador UFN', value:format(vals.ufn,0), note:'Columna N'},
-      {label:'Turbidez promedio', value:format(vals.turbidez,2)+' NTU', note:'Periodo activo'},
-      {label:'TK nuevo', value:format(vals.tkNuevo,1), note:'Columna D'},
-      {label:'TK antiguo', value:format(vals.tkAntiguo,1), note:'Columna E'},
+      {label:'Producción UFN', value:format(vals.prodUfn,2), note:'BC'},
+      {label:'Totalizador UFN', value:format(vals.ufn,0), note:'N'},
+      {label:'Turbidez promedio', value:format(vals.turbidez,2)+' NTU', note:'Referencia del periodo'},
+      {label:'TK nuevo', value:format(vals.tkNuevo,1), note:'D'},
+      {label:'TK antiguo', value:format(vals.tkAntiguo,1), note:'E'},
       {label:'Recuperación promedio', value:format(avg([vals.roa,vals.rob,vals.roc,vals.rod,vals.roe]),1)+'%', note:'Promedio RO'},
-      {label:'Estado filtro', value:'Operativo', note:'Visual de proceso'},
       {label:'Destino', value:'RO A - E', note:'Distribución general'},
       {label:'Periodo visible', value:labelPeriodo, note:'Filtro actual'}
     ]
@@ -754,7 +764,17 @@ function renderDashboard(){
     volB: vista==='dia' ? diaData.volB : avg(periodo.map(r=>r.volB)),
     volC: vista==='dia' ? diaData.volC : avg(periodo.map(r=>r.volC)),
     volD: vista==='dia' ? diaData.volD : avg(periodo.map(r=>r.volD)),
-    volE: vista==='dia' ? diaData.volE : avg(periodo.map(r=>r.volE))
+    volE: vista==='dia' ? diaData.volE : avg(periodo.map(r=>r.volE)),
+    turbUfi1: vista==='dia' ? diaData.turbUfi1 : avg(periodo.map(r=>r.turbUfi1)),
+    turbUfi2: vista==='dia' ? diaData.turbUfi2 : avg(periodo.map(r=>r.turbUfi2)),
+    turbUfi3: vista==='dia' ? diaData.turbUfi3 : avg(periodo.map(r=>r.turbUfi3)),
+    dpUfi1: vista==='dia' ? diaData.dpUfi1 : avg(periodo.map(r=>r.dpUfi1)),
+    dpUfi2: vista==='dia' ? diaData.dpUfi2 : avg(periodo.map(r=>r.dpUfi2)),
+    dpUfi3: vista==='dia' ? diaData.dpUfi3 : avg(periodo.map(r=>r.dpUfi3)),
+    prodUfi1: vista==='dia' ? diaData.prodUfi1 : avg(periodo.map(r=>r.prodUfi1)),
+    prodUfi2: vista==='dia' ? diaData.prodUfi2 : avg(periodo.map(r=>r.prodUfi2)),
+    prodUfi3: vista==='dia' ? diaData.prodUfi3 : avg(periodo.map(r=>r.prodUfi3)),
+    prodUfn: vista==='dia' ? diaData.prodUfn : avg(periodo.map(r=>r.prodUfn))
   };
 
   document.getElementById('kpiTkNuevo').innerHTML = `${format(vals.tkNuevo,1)} <span class="unit">m³</span>`;
