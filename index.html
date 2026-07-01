@@ -71,11 +71,11 @@
     .sync{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-height:38px}.sync.ok{color:var(--green)}.sync.err{color:var(--red)}.refresh-btn{width:100%;background:linear-gradient(135deg,#2589c2,#1a5e9a);border:0;color:white;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(37,137,194,.18)}.refresh-btn:hover{filter:brightness(1.08)}.refresh-btn:active{transform:translateY(1px)}
     .kpis{display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:10px;margin-bottom:12px}.kpi{background:#f8fafc;color:#102033;border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.1);box-shadow:0 9px 20px rgba(0,0,0,.13)}
     .kpi .top{display:flex;justify-content:space-between;align-items:center;color:#64748b;font-size:.74rem;text-transform:uppercase;font-weight:700;gap:8px}.kpi .value{font-size:1.4rem;font-weight:800;margin-top:7px;line-height:1}.kpi .unit{font-size:.85rem;color:#64748b;font-weight:600}.kpi .note{margin-top:7px;font-size:.75rem;color:#64748b}.kpi.green{border-left:5px solid var(--green)}.kpi.blue{border-left:5px solid var(--cyan)}.kpi.red{border-left:5px solid var(--red)}.kpi.yellow{border-left:5px solid var(--yellow)}.kpi.purple{border-left:5px solid var(--purple)}
-    .grid{display:grid;grid-template-columns:290px 1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
     .panel-title{background:#102033;color:white;padding:13px 16px;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-body{padding:12px}
-    .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1rem}.summary-duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.mini-box{background:#eef6ff;border:1px solid #d7e8ff;border-radius:12px;padding:10px}.mini-box .lbl{font-size:.72rem;color:#64748b;text-transform:uppercase}.mini-box .val{font-size:1.1rem;font-weight:800;margin-top:4px}
+    .summary-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1.02rem}.summary-duo{display:none}.mini-box{display:none}
     .prod-widget{
-      margin-top:14px;
+      margin:0 0 12px 0;
       background:linear-gradient(135deg,#0c2036,#123251 52%,#1a5e9a);
       border:1px solid rgba(37,137,194,.38);
       border-radius:18px;
@@ -284,6 +284,7 @@
     @media(max-width:980px){
       .prod-main{grid-template-columns:1fr}
       .prod-ring{margin:auto}
+      .prod-values{grid-template-columns:1fr}
     }
     .scada-card{margin-bottom:12px}.ros{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro{background:#ffffff;border-radius:14px;padding:10px;border:1px solid #e2e8f0;position:relative;overflow:hidden}.ro:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--green)}.ro.low:before{background:var(--red)}.ro h3{font-size:.92rem;margin-bottom:8px}.ro .pct{font-size:1.35rem;font-weight:900;color:#102033}.ro .meta{font-size:.75rem;color:#64748b;margin-top:5px}.ro .pipe{margin-top:12px;height:8px;border-radius:99px;background:linear-gradient(90deg,#b9d7ee,#2589c2)}.ro.low .pipe{background:linear-gradient(90deg,#fee2e2,#ef4444)}
     .charts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.chart{height:270px}.canvas-wrap{position:relative;height:210px;width:100%}
@@ -395,8 +396,9 @@
       color:#bdd4e8 !important;
     }
 
-    @media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr 1fr}.filters{grid-template-columns:repeat(3,1fr)}.modules-hero{grid-template-columns:1fr}.modules-quick{grid-template-columns:repeat(2,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#2589c2,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.kpis{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.modules-quick{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
+    .prod-widget-top{width:100%}.prod-main{grid-template-columns:140px 1fr}.prod-values{grid-template-columns:repeat(3,1fr)}.prod-extra{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:11px;backdrop-filter:blur(6px)}.prod-extra .lbl{font-size:.68rem;color:#bdd4e8;text-transform:uppercase;font-weight:800}.prod-extra .val{font-size:1.18rem;font-weight:950;color:#ffffff;margin-top:4px}.prod-source{margin-top:6px;font-size:.7rem;color:#bdd4e8;text-align:right}
+    @media(max-width:1250px){.grid{grid-template-columns:1fr}.ros{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr 1fr}.filters{grid-template-columns:repeat(3,1fr)}.modules-hero{grid-template-columns:1fr}.modules-quick{grid-template-columns:repeat(2,1fr)}.module-scada-wrap{grid-template-columns:repeat(2,1fr)}.scada-flow{grid-template-columns:1fr;}.flow-line{width:12px;height:48px;margin:auto;background:linear-gradient(180deg,#2589c2,#00e676)}.flow-line:after{right:50%;top:auto;bottom:-12px;transform:translateX(50%);border-top:12px solid #00e676;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0}.ro-trains{grid-template-columns:repeat(2,1fr)}.scada-bottom{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:820px){.topbar{flex-direction:column;align-items:flex-start}.charts{grid-template-columns:1fr}.ros{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.modules-quick{grid-template-columns:1fr}.module-scada-wrap{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.ro-trains{grid-template-columns:1fr}.scada-bottom{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -446,26 +448,8 @@
     </section>
 
     <section class="view-section active" id="dashboardView">
-    <section class="kpis">
-      <div class="kpi green"><div class="top"><span>TK Nuevo</span><i class="fas fa-water"></i></div><div class="value" id="kpiTkNuevo">-- <span class="unit">m³</span></div><div class="note">Columna D</div></div>
-      <div class="kpi blue"><div class="top"><span>TK Antiguo</span><i class="fas fa-database"></i></div><div class="value" id="kpiTkAntiguo">-- <span class="unit">m³</span></div><div class="note">Columna E</div></div>
-      <div class="kpi purple"><div class="top"><span>Rec. Nuevo</span><i class="fas fa-recycle"></i></div><div class="value" id="kpiRecNuevo">-- <span class="unit">%</span></div><div class="note">Columna F</div></div>
-      <div class="kpi yellow"><div class="top"><span>Rec. Antiguo</span><i class="fas fa-chart-line"></i></div><div class="value" id="kpiRecAntiguo">-- <span class="unit">%</span></div><div class="note">Columna G</div></div>
-      <div class="kpi red"><div class="top"><span>Turbidez</span><i class="fas fa-vial"></i></div><div class="value" id="kpiTurbidez">-- <span class="unit">NTU</span></div><div class="note">Columna B</div></div>
-      <div class="kpi blue"><div class="top"><span>UFI / UFN</span><i class="fas fa-gauge-high"></i></div><div class="value" id="kpiUfiUfn">--</div><div class="note">M / N</div></div>
-    </section>
 
-    <section class="grid">
-      <div>
-        <div class="panel">
-          <div class="panel-title"><span><i class="fas fa-list-check"></i> Resumen operativo</span><span id="resumenPeriodo">--</span></div>
-          <div class="panel-body">
-            <div class="summary-row"><span>Totalizador agua de mar</span><strong id="sumFecha">--</strong></div>
-            <div class="summary-row"><span>Prom. agua osmotizada</span><strong id="sumTurbidez">--</strong></div>
-            <div class="summary-row"><span>Caudal total</span><strong id="sumRecRO">--</strong></div>
-            <div class="summary-row"><span>Totalizador UFI</span><strong id="sumUfi">--</strong></div>
-            <div class="summary-row"><span>Totalizador UFN</span><strong id="sumUfn">--</strong></div>
-            <div class="prod-widget">
+    <div class="prod-widget prod-widget-top">
               <div class="prod-head">
                 <div class="prod-title"><i class="fas fa-bullseye"></i> Producción requerida vs alcanzada</div>
                 <div class="prod-status" id="prodStatus">--</div>
@@ -481,6 +465,7 @@
                   <div class="prod-values">
                     <div class="prod-box"><div class="lbl">Producción requerida</div><div class="val" id="prodReqVal">--</div></div>
                     <div class="prod-box"><div class="lbl">Producción alcanzada</div><div class="val" id="prodAchVal">--</div></div>
+                    <div class="prod-extra"><div class="lbl">Meta restante</div><div class="val" id="prodRestVal">--</div></div>
                   </div>
                   <div class="prod-bar-wrap">
                     <div class="prod-bar-track"><div class="prod-bar-fill" id="prodBarFill"></div></div>
@@ -489,16 +474,22 @@
                     <span>Cumplimiento: <strong id="prodPct">--</strong></span>
                     <span>Diferencia: <strong id="prodGap">--</strong></span>
                   </div>
-                  <div class="prod-message" id="prodMessage">Esperando datos de producción...</div>
+                  <div class="prod-message" id="prodMessage">Esperando datos de producción...</div><div class="prod-source">Origen: requerida A2 | alcanzada BF7+</div>
                 </div>
               </div>
             </div>
-            <div class="summary-duo">
-              <div class="mini-box"><div class="lbl">TK Nuevo</div><div class="val" id="boxTkNuevo">--</div></div>
-              <div class="mini-box"><div class="lbl">TK Antiguo</div><div class="val" id="boxTkAntiguo">--</div></div>
-              <div class="mini-box"><div class="lbl">Rec. Nuevo</div><div class="val" id="boxRecNuevo">--</div></div>
-              <div class="mini-box"><div class="lbl">Rec. Antiguo</div><div class="val" id="boxRecAntiguo">--</div></div>
-            </div>
+            
+
+    <section class="grid">
+      <div>
+        <div class="panel">
+          <div class="panel-title"><span><i class="fas fa-list-check"></i> Resumen operativo</span><span id="resumenPeriodo">--</span></div>
+          <div class="panel-body">
+            <div class="summary-row"><span>Totalizador agua de mar</span><strong id="sumFecha">--</strong></div>
+            <div class="summary-row"><span>Prom. agua osmotizada</span><strong id="sumTurbidez">--</strong></div>
+            <div class="summary-row"><span>Caudal total</span><strong id="sumRecRO">--</strong></div>
+            <div class="summary-row"><span>Totalizador UFI</span><strong id="sumUfi">--</strong></div>
+            <div class="summary-row"><span>Totalizador UFN</span><strong id="sumUfn">--</strong></div>
           </div>
         </div>
       </div>
@@ -1024,19 +1015,21 @@ function renderDashboard(){
     prodAlcanzada: vista==='dia' ? diaData.prodAlcanzada : sum(periodo.map(r=>r.prodAlcanzada))
   };
 
-  document.getElementById('kpiTkNuevo').innerHTML = `${format(vals.tkNuevo,1)} <span class="unit">m³</span>`;
-  document.getElementById('kpiTkAntiguo').innerHTML = `${format(vals.tkAntiguo,1)} <span class="unit">m³</span>`;
-  document.getElementById('kpiRecNuevo').innerHTML = `${format(vals.recNuevo,1)} <span class="unit">%</span>`;
-  document.getElementById('kpiRecAntiguo').innerHTML = `${format(vals.recAntiguo,1)} <span class="unit">%</span>`;
-  document.getElementById('kpiTurbidez').innerHTML = `${format(vals.turbidez,2)} <span class="unit">NTU</span>`;
-  document.getElementById('kpiUfiUfn').innerHTML = `${format(vals.ufi,0)} / ${format(vals.ufn,0)}`;
+  const elKpiTkNuevo = document.getElementById('kpiTkNuevo'); if(elKpiTkNuevo) elKpiTkNuevo.innerHTML = `${format(vals.tkNuevo,1)} <span class="unit">m³</span>`;
+  const elKpiTkAntiguo = document.getElementById('kpiTkAntiguo'); if(elKpiTkAntiguo) elKpiTkAntiguo.innerHTML = `${format(vals.tkAntiguo,1)} <span class="unit">m³</span>`;
+  const elKpiRecNuevo = document.getElementById('kpiRecNuevo'); if(elKpiRecNuevo) elKpiRecNuevo.innerHTML = `${format(vals.recNuevo,1)} <span class="unit">%</span>`;
+  const elKpiRecAntiguo = document.getElementById('kpiRecAntiguo'); if(elKpiRecAntiguo) elKpiRecAntiguo.innerHTML = `${format(vals.recAntiguo,1)} <span class="unit">%</span>`;
+  const elKpiTurbidez = document.getElementById('kpiTurbidez'); if(elKpiTurbidez) elKpiTurbidez.innerHTML = `${format(vals.turbidez,2)} <span class="unit">NTU</span>`;
+  const elKpiUfiUfn = document.getElementById('kpiUfiUfn'); if(elKpiUfiUfn) elKpiUfiUfn.innerHTML = `${format(vals.ufi,0)} / ${format(vals.ufn,0)}`;
 
   document.getElementById('resumenPeriodo').innerText=labelPeriodo; document.getElementById('sumFecha').innerText=`${format(vals.totalAguaMar,0)} m³`;
   document.getElementById('sumTurbidez').innerText=`${format(vals.promAguaOsm,2)} m³`;
   document.getElementById('sumRecRO').innerText=`${format(vals.caudalTotal,2)}`;
   document.getElementById('sumUfi').innerText=`${format(vals.ufi,0)} m³`; document.getElementById('sumUfn').innerText=`${format(vals.ufn,0)} m³`;
-  document.getElementById('boxTkNuevo').innerText=format(vals.tkNuevo,1); document.getElementById('boxTkAntiguo').innerText=format(vals.tkAntiguo,1);
-  document.getElementById('boxRecNuevo').innerText=format(vals.recNuevo,1)+'%'; document.getElementById('boxRecAntiguo').innerText=format(vals.recAntiguo,1)+'%';
+  const elBoxTkNuevo = document.getElementById('boxTkNuevo'); if(elBoxTkNuevo) elBoxTkNuevo.innerText=format(vals.tkNuevo,1);
+  const elBoxTkAntiguo = document.getElementById('boxTkAntiguo'); if(elBoxTkAntiguo) elBoxTkAntiguo.innerText=format(vals.tkAntiguo,1);
+  const elBoxRecNuevo = document.getElementById('boxRecNuevo'); if(elBoxRecNuevo) elBoxRecNuevo.innerText=format(vals.recNuevo,1)+'%';
+  const elBoxRecAntiguo = document.getElementById('boxRecAntiguo'); if(elBoxRecAntiguo) elBoxRecAntiguo.innerText=format(vals.recAntiguo,1)+'%';
 
   const diasPeriodo = Math.max(1, periodo.length || 1);
   const prodReqBase = sheetMeta.prodRequerida || 0;
@@ -1045,11 +1038,12 @@ function renderDashboard(){
   const prodPctNum = prodReq > 0 ? (prodAch / prodReq) * 100 : 0;
   const prodPctSafe = Math.max(0, Math.min(prodPctNum, 100));
   const prodGap = prodAch - prodReq;
-  document.getElementById('prodReqVal').innerHTML = `${format(prodReq,2)} <small>m³</small>`;
-  document.getElementById('prodAchVal').innerHTML = `${format(prodAch,2)} <small>m³</small>`;
+  document.getElementById('prodReqVal').innerHTML = `${format(prodReq,0)} <small>m³</small>`;
+  document.getElementById('prodAchVal').innerHTML = `${format(prodAch,0)} <small>m³</small>`;
+  document.getElementById('prodRestVal').innerHTML = `${format(Math.max(prodReq - prodAch, 0),0)} <small>m³</small>`;
   document.getElementById('prodPct').innerText = `${format(prodPctNum,1)}%`;
   document.getElementById('prodPctRing').innerText = `${format(prodPctNum,0)}%`;
-  document.getElementById('prodGap').innerText = `${prodGap>=0?'+':''}${format(prodGap,2)} m³`;
+  document.getElementById('prodGap').innerText = `${prodGap>=0?'+':''}${format(prodGap,0)} m³`;
   document.getElementById('prodBarFill').style.width = `${prodPctSafe}%`;
   const ringDeg = Math.max(0, Math.min(prodPctNum, 100)) * 3.6;
   const ringColor = prodPctNum >= 100 ? '#14b86e' : (prodPctNum >= 85 ? '#f59e0b' : '#ef4444');
@@ -1059,17 +1053,17 @@ function renderDashboard(){
   if(prodPctNum >= 100){
     prodStatus.innerText = 'Meta alcanzada';
     prodStatus.className = 'prod-status ok';
-    prodMessage.innerHTML = '<i class="fas fa-circle-check"></i> La producción alcanzada supera o cumple la requerida.';
+    prodMessage.innerHTML = `<i class="fas fa-circle-check"></i> La producción alcanzada supera o cumple la requerida por ${format(Math.abs(prodGap),0)} m³.`;
   }
   else if(prodPctNum >= 85){
     prodStatus.innerText = 'Cerca de meta';
     prodStatus.className = 'prod-status';
-    prodMessage.innerHTML = '<i class="fas fa-gauge-high"></i> La producción está cerca del objetivo. Revisar tendencia del turno.';
+    prodMessage.innerHTML = `<i class="fas fa-gauge-high"></i> Faltan ${format(Math.max(prodReq - prodAch,0),0)} m³ para llegar a la meta.`;
   }
   else {
     prodStatus.innerText = 'Bajo objetivo';
     prodStatus.className = 'prod-status low';
-    prodMessage.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La producción está por debajo de lo requerido. Revisar operación.';
+    prodMessage.innerHTML = `<i class="fas fa-triangle-exclamation"></i> La producción está por debajo de lo requerido. Faltan ${format(Math.max(prodReq - prodAch,0),0)} m³.`;
   }
 
   const roVals=[vals.roa,vals.rob,vals.roc,vals.rod,vals.roe], roNames=['RO A','RO B','RO C','RO D','RO E'];
