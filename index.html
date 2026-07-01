@@ -74,6 +74,217 @@
     .grid{display:grid;grid-template-columns:290px 1fr;gap:12px}.panel{background:#f8fafc;color:#102033;border-radius:18px;border:1px solid rgba(255,255,255,.13);box-shadow:var(--shadow);overflow:hidden}.panel.dark{background:var(--panel);color:var(--text);border:1px solid var(--border)}
     .panel-title{background:#102033;color:white;padding:13px 16px;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-body{padding:12px}
     .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #e2e8f0}.summary-row:last-child{border-bottom:0}.summary-row span{color:#64748b;font-size:.83rem}.summary-row strong{font-size:1rem}.summary-duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.mini-box{background:#eef6ff;border:1px solid #d7e8ff;border-radius:12px;padding:10px}.mini-box .lbl{font-size:.72rem;color:#64748b;text-transform:uppercase}.mini-box .val{font-size:1.1rem;font-weight:800;margin-top:4px}
+    .prod-widget{
+      margin-top:14px;
+      background:linear-gradient(135deg,#0c2036,#123251 52%,#1a5e9a);
+      border:1px solid rgba(37,137,194,.38);
+      border-radius:18px;
+      padding:14px;
+      color:#fff;
+      box-shadow:0 16px 32px rgba(18,50,81,.25), inset 0 1px 0 rgba(255,255,255,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .prod-widget::before{
+      content:"";
+      position:absolute;
+      right:-60px;
+      top:-70px;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+    }
+    .prod-widget::after{
+      content:"";
+      position:absolute;
+      left:-40px;
+      bottom:-60px;
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background:rgba(37,137,194,.18);
+    }
+    .prod-head{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .prod-title{
+      font-size:.82rem;
+      text-transform:uppercase;
+      color:#dbeffd;
+      font-weight:900;
+      letter-spacing:.45px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .prod-title i{
+      color:#ffffff;
+      animation:pulseIcon 1.6s infinite;
+    }
+    .prod-status{
+      font-size:.72rem;
+      font-weight:900;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.20);
+      color:#ffffff;
+      white-space:nowrap;
+    }
+    .prod-status.ok{
+      background:rgba(20,184,110,.20);
+      border-color:rgba(20,184,110,.50);
+      color:#dcfce7;
+    }
+    .prod-status.low{
+      background:rgba(239,68,68,.22);
+      border-color:rgba(239,68,68,.50);
+      color:#fee2e2;
+    }
+    .prod-main{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:14px;
+      align-items:center;
+    }
+    .prod-ring{
+      width:112px;
+      height:112px;
+      border-radius:50%;
+      background:conic-gradient(#14b86e 0deg,#1a5e9a 0deg,#263b58 0deg);
+      display:grid;
+      place-items:center;
+      box-shadow:0 0 26px rgba(37,137,194,.35);
+      position:relative;
+    }
+    .prod-ring::before{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#0c2036,#123251);
+      box-shadow:inset 0 0 16px rgba(0,0,0,.25);
+    }
+    .prod-ring-content{
+      position:relative;
+      z-index:1;
+      text-align:center;
+    }
+    .prod-ring-content strong{
+      display:block;
+      font-size:1.45rem;
+      line-height:1;
+      color:#fff;
+    }
+    .prod-ring-content span{
+      display:block;
+      margin-top:4px;
+      font-size:.68rem;
+      color:#bdd4e8;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+    .prod-values{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .prod-box{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:14px;
+      padding:11px;
+      backdrop-filter:blur(6px);
+    }
+    .prod-box .lbl{
+      font-size:.68rem;
+      color:#bdd4e8;
+      text-transform:uppercase;
+      font-weight:800;
+    }
+    .prod-box .val{
+      font-size:1.18rem;
+      font-weight:950;
+      color:#ffffff;
+      margin-top:4px;
+    }
+    .prod-box .val small{
+      font-size:.72rem;
+      color:#c8d9e8;
+      font-weight:800;
+    }
+    .prod-bar-wrap{
+      margin-top:8px;
+    }
+    .prod-bar-track{
+      height:14px;
+      background:rgba(255,255,255,.15);
+      border-radius:999px;
+      overflow:hidden;
+      position:relative;
+    }
+    .prod-bar-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#2589c2,#14b86e);
+      border-radius:999px;
+      transition:width .45s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .prod-bar-fill::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+      transform:translateX(-100%);
+      animation:shineBar 2.2s infinite;
+    }
+    .prod-footer{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:8px;
+      font-size:.78rem;
+      color:#d7eaff;
+    }
+    .prod-footer strong{
+      color:#ffffff;
+      font-weight:900;
+    }
+    .prod-message{
+      margin-top:9px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:.76rem;
+      color:#eaf6ff;
+      position:relative;
+      z-index:1;
+    }
+    @keyframes shineBar{
+      0%{transform:translateX(-100%)}
+      60%,100%{transform:translateX(100%)}
+    }
+    @keyframes pulseIcon{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.16);opacity:.85}
+    }
+    @media(max-width:980px){
+      .prod-main{grid-template-columns:1fr}
+      .prod-ring{margin:auto}
+    }
     .scada-card{margin-bottom:12px}.ros{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.ro{background:#ffffff;border-radius:14px;padding:10px;border:1px solid #e2e8f0;position:relative;overflow:hidden}.ro:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--green)}.ro.low:before{background:var(--red)}.ro h3{font-size:.92rem;margin-bottom:8px}.ro .pct{font-size:1.35rem;font-weight:900;color:#102033}.ro .meta{font-size:.75rem;color:#64748b;margin-top:5px}.ro .pipe{margin-top:12px;height:8px;border-radius:99px;background:linear-gradient(90deg,#b9d7ee,#2589c2)}.ro.low .pipe{background:linear-gradient(90deg,#fee2e2,#ef4444)}
     .charts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.chart{height:270px}.canvas-wrap{position:relative;height:210px;width:100%}
     .footer-note{margin-top:10px;color:var(--muted);font-size:.76rem;text-align:right}
@@ -254,6 +465,34 @@
             <div class="summary-row"><span>Caudal total</span><strong id="sumRecRO">--</strong></div>
             <div class="summary-row"><span>Totalizador UFI</span><strong id="sumUfi">--</strong></div>
             <div class="summary-row"><span>Totalizador UFN</span><strong id="sumUfn">--</strong></div>
+            <div class="prod-widget">
+              <div class="prod-head">
+                <div class="prod-title"><i class="fas fa-bullseye"></i> Producción requerida vs alcanzada</div>
+                <div class="prod-status" id="prodStatus">--</div>
+              </div>
+              <div class="prod-main">
+                <div class="prod-ring" id="prodRing">
+                  <div class="prod-ring-content">
+                    <strong id="prodPctRing">--</strong>
+                    <span>Cumplimiento</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="prod-values">
+                    <div class="prod-box"><div class="lbl">Producción requerida</div><div class="val" id="prodReqVal">--</div></div>
+                    <div class="prod-box"><div class="lbl">Producción alcanzada</div><div class="val" id="prodAchVal">--</div></div>
+                  </div>
+                  <div class="prod-bar-wrap">
+                    <div class="prod-bar-track"><div class="prod-bar-fill" id="prodBarFill"></div></div>
+                  </div>
+                  <div class="prod-footer">
+                    <span>Cumplimiento: <strong id="prodPct">--</strong></span>
+                    <span>Diferencia: <strong id="prodGap">--</strong></span>
+                  </div>
+                  <div class="prod-message" id="prodMessage">Esperando datos de producción...</div>
+                </div>
+              </div>
+            </div>
             <div class="summary-duo">
               <div class="mini-box"><div class="lbl">TK Nuevo</div><div class="val" id="boxTkNuevo">--</div></div>
               <div class="mini-box"><div class="lbl">TK Antiguo</div><div class="val" id="boxTkAntiguo">--</div></div>
@@ -356,7 +595,7 @@ const COL = {
   turbUfi1:45, turbUfi2:46, turbUfi3:47,
   dpUfi1:48, dpUfi2:49, dpUfi3:50,
   prodUfi1:51, prodUfi2:52, prodUfi3:53, prodUfn:54,
-  promAguaOsm:55, totalAguaMar:56, caudalTotal:44
+  promAguaOsm:55, totalAguaMar:56, prodAlcanzada:57, caudalTotal:44
 };
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const AUTO_REFRESH_MS = 15000; // 15 segundos: máximo práctico para no saturar Google Sheets
@@ -367,6 +606,7 @@ let autoTimer = null;
 let currentAppView = 'dashboard';
 let selectedAssetId = 'roa';
 let currentModuleAssets = {};
+let sheetMeta = { prodRequerida: null };
 
 function toggleMenu(){ document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
 function showAppView(view){
@@ -466,7 +706,7 @@ async function cargarSheets(manual=false){
         turbUfi1: toNum(f[COL.turbUfi1]), turbUfi2: toNum(f[COL.turbUfi2]), turbUfi3: toNum(f[COL.turbUfi3]),
         dpUfi1: toNum(f[COL.dpUfi1]), dpUfi2: toNum(f[COL.dpUfi2]), dpUfi3: toNum(f[COL.dpUfi3]),
         prodUfi1: toNum(f[COL.prodUfi1]), prodUfi2: toNum(f[COL.prodUfi2]), prodUfi3: toNum(f[COL.prodUfi3]), prodUfn: toNum(f[COL.prodUfn]),
-        promAguaOsm: toNum(f[COL.promAguaOsm]), totalAguaMar: toNum(f[COL.totalAguaMar])
+        promAguaOsm: toNum(f[COL.promAguaOsm]), totalAguaMar: toNum(f[COL.totalAguaMar]), prodAlcanzada: toNum(f[COL.prodAlcanzada])
       };
     }).filter(x => x.fecha).sort((a,b)=>a.fecha-b.fecha);
 
@@ -780,7 +1020,8 @@ function renderDashboard(){
     prodUfi1: vista==='dia' ? diaData.prodUfi1 : avg(periodo.map(r=>r.prodUfi1)),
     prodUfi2: vista==='dia' ? diaData.prodUfi2 : avg(periodo.map(r=>r.prodUfi2)),
     prodUfi3: vista==='dia' ? diaData.prodUfi3 : avg(periodo.map(r=>r.prodUfi3)),
-    prodUfn: vista==='dia' ? diaData.prodUfn : avg(periodo.map(r=>r.prodUfn))
+    prodUfn: vista==='dia' ? diaData.prodUfn : avg(periodo.map(r=>r.prodUfn)),
+    prodAlcanzada: vista==='dia' ? diaData.prodAlcanzada : sum(periodo.map(r=>r.prodAlcanzada))
   };
 
   document.getElementById('kpiTkNuevo').innerHTML = `${format(vals.tkNuevo,1)} <span class="unit">m³</span>`;
@@ -796,6 +1037,40 @@ function renderDashboard(){
   document.getElementById('sumUfi').innerText=`${format(vals.ufi,0)} m³`; document.getElementById('sumUfn').innerText=`${format(vals.ufn,0)} m³`;
   document.getElementById('boxTkNuevo').innerText=format(vals.tkNuevo,1); document.getElementById('boxTkAntiguo').innerText=format(vals.tkAntiguo,1);
   document.getElementById('boxRecNuevo').innerText=format(vals.recNuevo,1)+'%'; document.getElementById('boxRecAntiguo').innerText=format(vals.recAntiguo,1)+'%';
+
+  const diasPeriodo = Math.max(1, periodo.length || 1);
+  const prodReqBase = sheetMeta.prodRequerida || 0;
+  const prodReq = vista==='dia' ? prodReqBase : prodReqBase * diasPeriodo;
+  const prodAch = vals.prodAlcanzada || 0;
+  const prodPctNum = prodReq > 0 ? (prodAch / prodReq) * 100 : 0;
+  const prodPctSafe = Math.max(0, Math.min(prodPctNum, 100));
+  const prodGap = prodAch - prodReq;
+  document.getElementById('prodReqVal').innerHTML = `${format(prodReq,2)} <small>m³</small>`;
+  document.getElementById('prodAchVal').innerHTML = `${format(prodAch,2)} <small>m³</small>`;
+  document.getElementById('prodPct').innerText = `${format(prodPctNum,1)}%`;
+  document.getElementById('prodPctRing').innerText = `${format(prodPctNum,0)}%`;
+  document.getElementById('prodGap').innerText = `${prodGap>=0?'+':''}${format(prodGap,2)} m³`;
+  document.getElementById('prodBarFill').style.width = `${prodPctSafe}%`;
+  const ringDeg = Math.max(0, Math.min(prodPctNum, 100)) * 3.6;
+  const ringColor = prodPctNum >= 100 ? '#14b86e' : (prodPctNum >= 85 ? '#f59e0b' : '#ef4444');
+  document.getElementById('prodRing').style.background = `conic-gradient(${ringColor} ${ringDeg}deg, rgba(255,255,255,.18) ${ringDeg}deg)`;
+  const prodStatus = document.getElementById('prodStatus');
+  const prodMessage = document.getElementById('prodMessage');
+  if(prodPctNum >= 100){
+    prodStatus.innerText = 'Meta alcanzada';
+    prodStatus.className = 'prod-status ok';
+    prodMessage.innerHTML = '<i class="fas fa-circle-check"></i> La producción alcanzada supera o cumple la requerida.';
+  }
+  else if(prodPctNum >= 85){
+    prodStatus.innerText = 'Cerca de meta';
+    prodStatus.className = 'prod-status';
+    prodMessage.innerHTML = '<i class="fas fa-gauge-high"></i> La producción está cerca del objetivo. Revisar tendencia del turno.';
+  }
+  else {
+    prodStatus.innerText = 'Bajo objetivo';
+    prodStatus.className = 'prod-status low';
+    prodMessage.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La producción está por debajo de lo requerido. Revisar operación.';
+  }
 
   const roVals=[vals.roa,vals.rob,vals.roc,vals.rod,vals.roe], roNames=['RO A','RO B','RO C','RO D','RO E'];
   document.getElementById('roCards').innerHTML=roVals.map((v,i)=>`<div class="ro ${v!=null && v<20?'low':''}"><h3>${roNames[i]}</h3><div class="pct">${format(v,1)}%</div><div class="meta">${v!=null && v<20?'Baja recuperación':'Operación estable'}</div><div class="pipe"></div></div>`).join('');
