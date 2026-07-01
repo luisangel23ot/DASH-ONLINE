@@ -1033,14 +1033,13 @@ function renderDashboard(){
   const elBoxRecAntiguo = document.getElementById('boxRecAntiguo'); if(elBoxRecAntiguo) elBoxRecAntiguo.innerText=format(vals.recAntiguo,1)+'%';
 
   const diasPeriodo = Math.max(1, periodo.length || 1);
-  const prodReqBase = vals.prodRequerida || sheetMeta.prodRequerida || 0;
+  const prodReqBase = sheetMeta.prodRequerida || vals.prodRequerida || 0;
   const prodReq = vista==='dia' ? prodReqBase : prodReqBase * diasPeriodo;
   const prodAch = vals.prodAlcanzada || 0;
-  if(!sheetMeta.prodRequerida && vals.prodRequerida) sheetMeta.prodRequerida = vals.prodRequerida;
   const prodPctNum = prodReq > 0 ? (prodAch / prodReq) * 100 : 0;
   const prodPctSafe = Math.max(0, Math.min(prodPctNum, 100));
   const prodGap = prodAch - prodReq;
-  document.getElementById('prodReqVal').innerHTML = `${format(prodReq,0)} <small>m³</small>`;
+  document.getElementById('prodReqVal').innerHTML = prodReqBase ? `${format(prodReq,0)} <small>m³</small>` : `-- <small>m³</small>`;
   document.getElementById('prodAchVal').innerHTML = `${format(prodAch,0)} <small>m³</small>`;
   document.getElementById('prodRestVal').innerHTML = `${format(Math.max(prodReq - prodAch, 0),0)} <small>m³</small>`;
   document.getElementById('prodPct').innerText = `${format(prodPctNum,1)}%`;
@@ -1052,7 +1051,12 @@ function renderDashboard(){
   document.getElementById('prodRing').style.background = `conic-gradient(${ringColor} ${ringDeg}deg, rgba(255,255,255,.18) ${ringDeg}deg)`;
   const prodStatus = document.getElementById('prodStatus');
   const prodMessage = document.getElementById('prodMessage');
-  if(prodPctNum >= 100){
+  if(!prodReqBase){
+    prodStatus.innerText = 'Sin meta';
+    prodStatus.className = 'prod-status low';
+    prodMessage.innerHTML = '<i class="fas fa-triangle-exclamation"></i> No se encontró valor en BG7. Verifica que BG7 tenga la producción requerida y que el Sheets esté publicado actualizado.';
+  }
+  else if(prodPctNum >= 100){
     prodStatus.innerText = 'Meta alcanzada';
     prodStatus.className = 'prod-status ok';
     prodMessage.innerHTML = `<i class="fas fa-circle-check"></i> La producción alcanzada supera o cumple la requerida por ${format(Math.abs(prodGap),0)} m³.`;
